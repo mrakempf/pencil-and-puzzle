@@ -1,8 +1,14 @@
 # Pencil & Puzzle
 
-An endless puzzle book in a single web page: Sudoku, Word Search, Cryptograms, Logic Grids, Fill-In, Letterboxes, Places Please, Word Chains and Word Scrambles, each at four difficulties (Easy, Medium, Hard, Expert).
+An endless puzzle book in a single web page, with 13 kinds of puzzle at four difficulties (Easy, Medium, Hard, Expert):
 
-- **Puzzle of the day**: a new puzzle every day, with a streak and a 7-day strip to catch up on missed days.
+- **Word games**: Word Guess (guess a hidden word in six tries), Four by Four (sort 16 words into four groups), Word Threads (trace themed words through a letter grid), Letter Hive (make words from seven letters).
+- **Classic puzzles**: Sudoku, Word Search, Cryptograms, Logic Grids, Fill-In, Letterboxes, Places Please, Word Chains and Word Scrambles.
+
+Features:
+
+- **Themes**: over 50 themes, including holidays, seasons, sports (softball, baseball, football, basketball and more), food, animals and hobbies. Word Search, Word Scramble, Letterboxes, Word Guess, Four by Four and Word Threads use the chosen theme. "Today's theme" follows the calendar: holidays first, then the season and whatever sports are in season.
+- **Puzzle of the day**: a new puzzle every day, themed by the calendar, with a streak and a 7-day strip to catch up on missed days.
 - **Journey**: levels in chapters of 8 around an island, getting harder as you go; up to 3 stars per level.
 - **Points for hints**: every solved puzzle earns points (Easy 5, Medium 10, Hard 15, Expert 20, half again with no hints, +5 for the daily). Each hint costs 5. You start with 25.
 - **XP and titles**: new puzzles earn XP toward solver levels, from "Pencil Sharpener" to "Puzzle Legend".

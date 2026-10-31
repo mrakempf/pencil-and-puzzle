@@ -308,6 +308,79 @@ p{margin:0}
 .lbx-adv .tip{width:100%;text-align:center}
 .lbx-adv button{min-width:34px;height:34px;border:1px solid var(--line);background:var(--paper);border-radius:6px;font:700 15px var(--f-body);padding:0 8px}
 .lbx-adv button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* Word Guess, Four by Four, Word Threads, Letter Hive, theme picker */
+:root{--hit:#3d8b57;--near:#c9971c;--miss:#7b878a;--t1:#f2d36b;--t2:#a7c66b;--t3:#a8c0ec;--t4:#c194d1;--wt:#a6d4e6;--on-color:#1b2a31}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hit:#4a9a66;--near:#b98b1d;--miss:#4b585b;--wt:#8cc3d8}}
+:root[data-theme="dark"]{--hit:#4a9a66;--near:#b98b1d;--miss:#4b585b;--wt:#8cc3d8}
+.theme-sel{font:inherit;font-weight:600;padding:9px 12px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink);max-width:100%}
+.theme-pill{background:var(--pencil-soft);color:var(--ink)}
+.wg{display:grid;gap:6px;justify-content:center}
+.wg-row{display:grid;grid-template-columns:repeat(var(--L),minmax(0,54px));gap:6px}
+.wg-t{aspect-ratio:1;border:2px solid var(--line);display:grid;place-items:center;font:800 clamp(20px,6.5vw,30px) var(--f-display);background:var(--paper)}
+.wg-t.filled{border-color:var(--ink)}
+.wg-t.h,.wg-t.n,.wg-t.m{color:#fff;border-color:transparent}
+.wg-t.h{background:var(--hit)}.wg-t.n{background:var(--near)}.wg-t.m{background:var(--miss)}
+@media (prefers-reduced-motion:no-preference){.wg-t.h,.wg-t.n,.wg-t.m{animation:flip .35s ease}}
+@keyframes flip{from{transform:rotateX(90deg)}}
+.wg-k{padding:0 5px;border-radius:4px;color:#fff}.wg-k.h{background:var(--hit)}.wg-k.n{background:var(--near)}
+.wg-hints{text-align:center;font-weight:600;min-height:24px;margin:12px 0 4px}
+.wg-kb{display:grid;gap:6px;max-width:500px;margin:6px auto 0}
+.wg-kr{display:flex;gap:5px;justify-content:center}
+.wg-key{flex:1 1 0;min-width:0;max-width:44px;height:52px;border:0;border-radius:6px;background:var(--line);font:700 15px var(--f-body);padding:0}
+.wg-key.wide{max-width:66px;flex:1.5 1 0;font-size:12px}
+.wg-key.h,.wg-key.n,.wg-key.m{color:#fff}.wg-key.h{background:var(--hit)}.wg-key.n{background:var(--near)}.wg-key.m{background:var(--miss)}
+.ff{display:grid;gap:10px;max-width:560px;margin:0 auto}
+.ff-done{display:grid;gap:8px}
+.ff-bar{border-radius:10px;padding:12px;text-align:center;display:grid;gap:2px;color:var(--on-color)}
+.ff-bar b{font:800 14px var(--f-display);text-transform:uppercase;letter-spacing:.05em}
+.ff-bar span{font-size:14px}
+.ff-bar.t1{background:var(--t1)}.ff-bar.t2{background:var(--t2)}.ff-bar.t3{background:var(--t3)}.ff-bar.t4{background:var(--t4)}
+.ff-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ff-tile{min-height:68px;border:0;border-radius:10px;background:var(--peer);font:800 clamp(11px,3.2vw,15px) var(--f-body);text-transform:uppercase;padding:4px;overflow-wrap:anywhere;color:var(--ink)}
+.ff-tile.long{font-size:clamp(9px,2.6vw,13px)}
+.ff-tile.sel{background:var(--ink);color:var(--paper)}
+.ff-left{display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;color:var(--muted)}
+.ff-left i{width:12px;height:12px;border-radius:50%;background:var(--line);display:inline-block}
+.ff-left i.on{background:var(--ink)}
+.ff-ctrl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn:disabled{opacity:.4;cursor:default;filter:none}
+.wt-clue{font-size:clamp(22px,5vw,28px);margin-top:4px}
+.wt{display:grid;gap:10px;justify-items:center}
+.wt-cur{font:800 24px var(--f-display);letter-spacing:.08em;min-height:32px}
+.wt-board{position:relative;width:min(100%,330px);aspect-ratio:6/8;touch-action:none;user-select:none;-webkit-user-select:none}
+.wt-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(8,1fr)}
+.wt-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.wt-svg polyline{fill:none;stroke-width:.32;stroke-linecap:round;stroke-linejoin:round}
+.wt-svg .f{stroke:var(--wt)}.wt-svg .s{stroke:var(--pencil)}.wt-svg .c{stroke:var(--line)}
+.wt-c{position:relative;z-index:1;margin:12%;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;font:700 clamp(17px,5.4vw,23px) var(--f-body);color:var(--ink);padding:0}
+.wt-c.sel{background:var(--line)}
+.wt-c.found{background:var(--wt);color:var(--on-color)}
+.wt-c.span{background:var(--pencil);color:var(--on-color)}
+.wt-c.hint{box-shadow:inset 0 0 0 2.5px var(--sea)}
+.wt-c.dot::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:var(--sea)}
+.wt-c:disabled{cursor:default}
+.wt-ctrl{display:flex;gap:8px}
+.hv{display:grid;gap:14px;justify-items:center}
+.hv-score{width:min(100%,420px);display:grid;gap:6px}
+.hv-rank{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hv-rank b{font:800 18px var(--f-display)}
+.hv-bar{position:relative;height:10px;border-radius:5px;background:var(--line)}
+.hv-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--pencil)}
+.hv-bar span{position:absolute;top:-4px;width:3px;height:18px;margin-left:-1.5px;background:var(--ink);border-radius:2px}
+.hv-word{min-height:40px;font:800 30px var(--f-display);letter-spacing:.06em;text-align:center}
+.hv-word .c{color:var(--pencil);-webkit-text-stroke:1px var(--ink)}
+.hv-word .x{color:var(--muted)}
+.hv-word .ph{font:500 15px var(--f-body);letter-spacing:0;color:var(--muted)}
+.hv-comb{position:relative;width:240px;height:250px}
+.hv-cell{position:absolute;width:80px;height:70px;border:0;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:var(--peer);font:800 26px var(--f-display);color:var(--ink);padding:0}
+.hv-cell:hover{filter:brightness(.95)}
+.hv-cell.mid{background:var(--pencil);color:var(--on-color)}
+.hv-ctrl{display:flex;gap:8px}
+.hv-found{width:min(100%,520px);border:1px solid var(--line);border-radius:10px;padding:14px}
+.hv-found ul{list-style:none;padding:0;margin:8px 0 0;columns:3 120px;column-gap:16px}
+.hv-found li{padding:2px 0}
+.hv-found li.pg{font-weight:800}
 </style>
 </head><body>
 
@@ -368,7 +441,7 @@ const DICT=new Set(WORDS4);
 const OBSCURE=new Set(`dais tarn tare tern whet writ gird mead moot kiln lisp lout pate quay rend rife rote rout wane wean whir loam molt mown teem prow prim ploy pent nape lain gilt gill flit flax clod cull bode bile bane dell dole glib goad hale hilt hind hued hues ibis ions jute keel lard lass mace meld mire muse musk nick norm oust pare peal reek rile rued rues sire skew slat slew sown spar sped stow tact tome tong tout vale vial wads waft wily ream rasp ores orbs owed oily lobe jots hone gnaw gape garb dote crib cosy cove clad`.split(/\s+/).map(w=>w.toUpperCase()));
 const COMMON4=WORDS4.filter(w=>!OBSCURE.has(w));
 
-const THEMES=[
+const OLD_THEMES=[
  {name:'Fall Harvest',words:['ACORN','APPLE CIDER','AUTUMN','BONFIRE','CHESTNUT','CINNAMON','CORNSTALK','CRANBERRY','FOLIAGE','GOURD','HARVEST','HAYRIDE','MAPLE','NUTMEG','ORCHARD','PECAN','PUMPKIN','RAKE','SCARECROW','SQUASH','SWEATER','TURKEY','LEAVES','HAYSTACK','CARAMEL']},
  {name:'Christmas',words:['ANGEL','BELLS','CANDLE','CANDY CANE','CAROLS','CHIMNEY','COOKIES','ELVES','GARLAND','GINGERBREAD','HOLLY','ICICLE','MISTLETOE','ORNAMENT','REINDEER','RIBBON','SLEIGH','SNOWMAN','STOCKING','TINSEL','WREATH','PRESENTS','NUTCRACKER','EGGNOG','TOYS']},
  {name:'By the Sea',words:['ANCHOR','BEACON','BUOY','DRIFTWOOD','GULL','HARBOR','KELP','LANTERN','LIGHTHOUSE','PIER','SAILBOAT','SEASHELL','SHORE','TIDE','WAVES','COMPASS','DUNES','FERRY','OYSTER','PELICAN','SANDBAR','STARFISH','KEEPER','FOGHORN','CRAB']},
@@ -380,6 +453,66 @@ const THEMES=[
  {name:'Book Lovers',words:['NOVEL','CHAPTER','AUTHOR','POETRY','SONNET','LIBRARY','BOOKMARK','SPINE','COVER','PREFACE','PLOT','HERO','VILLAIN','EPILOGUE','FABLE','MYTH','LEGEND','SAGA','PROSE','STANZA','EDITOR','MYSTERY','ROMANCE','PAPERBACK','SEQUEL']},
  {name:'Cozy Evening',words:['BLANKET','QUILT','CANDLE','FIREPLACE','SLIPPERS','PILLOW','TEACUP','COCOA','LAMP','RUG','ARMCHAIR','BOOKSHELF','KNITTING','YARN','COZY','CURTAIN','PUZZLE','PAJAMAS','SOFA','MUG','NAP','KITTEN','HEARTH','CROSSWORD','LULLABY']},
 ];
+/* Every theme: key, display name, picker group, the spanning word for Word Threads, a Word Threads clue, and its words */
+const THEME_META={
+ 'Fall Harvest':['fall','Seasons & holidays','HARVEST','Leaf peeping'],
+ 'Christmas':['christmas','Seasons & holidays','CHRISTMAS','Deck the halls'],
+ 'By the Sea':['sea','Nature & animals','OCEANSIDE','Salt in the air'],
+ 'In the Garden':['garden','Home & hobbies','GARDENING','Dig in'],
+ 'Baking Day':['baking','Food & drink','BAKERY','Fresh from the oven'],
+ 'Backyard Birds':['birds','Nature & animals','BIRDWATCHING','Feathered friends'],
+ 'Weather Watch':['weather','Nature & animals','FORECAST','Check the sky'],
+ 'Whodunit':['whodunit','Places & stories','MYSTERY','Elementary'],
+ 'Book Lovers':['books','Home & hobbies','BOOKWORM','Turn the page'],
+ 'Cozy Evening':['cozy','Home & hobbies','FIRESIDE','Curl up'],
+};
+const TH=(key,name,group,span,clue,words)=>({key,name,group,span,clue,words:words.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean)});
+const THEMES=OLD_THEMES.map(t=>{const m=THEME_META[t.name];return{key:m[0],name:t.name,group:m[1],span:m[2],clue:m[3],words:t.words};}).concat([
+ TH('newyear',"New Year's",'Seasons & holidays','NEWYEAR','Out with the old','confetti,countdown,midnight,toast,resolution,fireworks,party,balloon,calendar,noisemaker,cheers,goals,sparkler,dance,clock,glitter,january,fresh,hats,streamer,ballroom'),
+ TH('winter','Winter','Seasons & holidays','WINTERTIME','Bundle up','snowflake,mittens,scarf,sled,icicle,frost,blizzard,snowman,cocoa,fireplace,skates,parka,shovel,igloo,hibernate,chill,flurry,sleet,boots,quilt,earmuffs,snowball'),
+ TH('valentines',"Valentine's Day",'Seasons & holidays','VALENTINE','Be mine','cupid,roses,heart,candy,cards,arrow,chocolate,sweetheart,love,kiss,hugs,lace,crush,adore,bouquet,date,cherub,pink,poem,ribbon'),
+ TH('stpatricks',"St. Patrick's Day",'Seasons & holidays','SHAMROCK','Luck of the Irish','clover,leprechaun,rainbow,gold,green,irish,parade,celtic,bagpipe,lucky,charm,harp,fiddle,emerald,dublin,stew,cabbage,coins,jig,pot of gold'),
+ TH('spring','Spring','Seasons & holidays','SPRINGTIME','April showers','blossom,tulip,daffodil,rain,puddle,robin,nest,sprout,garden,kite,lamb,bunny,meadow,breeze,seeds,lilac,bloom,umbrella,green,bud,rainboots'),
+ TH('easter','Easter','Seasons & holidays','EASTERBUNNY','Hop to it','basket,eggs,jellybean,chick,lily,bonnet,pastel,hunt,candy,chocolate,spring,ribbon,grass,lamb,parade,brunch,dye,hop,sunrise,tulip'),
+ TH('mothersday',"Mother's Day",'Seasons & holidays','MOTHERSDAY','Thanks, Mom','flowers,brunch,card,hugs,love,gift,carnation,breakfast,bouquet,jewelry,perfume,candle,spa,picnic,tulips,apron,photo,locket,cake,tea'),
+ TH('summer','Summer','Seasons & holidays','SUMMERTIME',"School's out",'beach,sunshine,pool,lemonade,picnic,camping,sandals,sunscreen,popsicle,hammock,firefly,vacation,sprinkler,watermelon,barbecue,swim,shade,boat,flipflops,ice cream'),
+ TH('july4','Fourth of July','Seasons & holidays','INDEPENDENCE','Red, white and boom','fireworks,flag,parade,picnic,sparkler,eagle,liberty,freedom,barbecue,stars,stripes,anthem,hotdog,banner,patriot,confetti,band,watermelon,salute,uncle sam'),
+ TH('backtoschool','Back to School','Seasons & holidays','CLASSROOM','First bell','pencil,backpack,notebook,teacher,ruler,crayon,eraser,locker,recess,homework,lunchbox,glue,binder,bus,chalk,desk,library,quiz,marker,scissors'),
+ TH('halloween','Halloween','Seasons & holidays','HALLOWEEN','Trick or treat','pumpkin,ghost,witch,costume,candy,bat,spider,cobweb,skeleton,mummy,vampire,broom,cauldron,lantern,spooky,haunted,zombie,moon,treat,goblin,black cat,candle'),
+ TH('thanksgiving','Thanksgiving','Seasons & holidays','THANKSGIVING','Gather round the table','turkey,stuffing,gravy,cranberry,pilgrim,pie,pumpkin,feast,family,parade,yams,grateful,cornbread,potatoes,rolls,napkin,gobble,football,acorn,leftovers'),
+ TH('hanukkah','Hanukkah','Seasons & holidays','HANUKKAH','Festival of lights','menorah,dreidel,latkes,candles,gelt,oil,donuts,blessing,eight,nights,shamash,applesauce,family,lights,gifts,songs,wick,glow,miracle,jelly'),
+ TH('softball','Softball','Sports & outdoors','SOFTBALL','Windmill windup','pitcher,catcher,batter,dugout,inning,bunt,homerun,strike,glove,helmet,bases,diamond,slide,outfield,shortstop,umpire,fastpitch,double,triple,foul,cleats,visor,rally,mitt'),
+ TH('baseball','Baseball','Sports & outdoors','BASEBALL','Take me out to the ballgame','pitcher,bullpen,dugout,homer,inning,strikeout,single,double,triple,glove,bat,umpire,pennant,stadium,peanuts,bunt,curveball,slider,shortstop,catcher,seventh inning'),
+ TH('football','Football','Sports & outdoors','FOOTBALL','Gridiron Sunday','touchdown,quarterback,huddle,kickoff,fumble,punt,helmet,tackle,end zone,field goal,blitz,snap,sack,referee,playbook,sideline,coach,tailgate,pylon,linebacker'),
+ TH('basketball','Basketball','Sports & outdoors','BASKETBALL','Nothing but net','dunk,hoop,rebound,dribble,layup,assist,jumpshot,court,guard,forward,center,backboard,buzzer,timeout,foul,bounce,pass,sneakers,arena,free throw'),
+ TH('soccer','Soccer','Sports & outdoors','GOALKEEPER','The beautiful game','goal,striker,defender,midfield,penalty,corner,header,offside,cleats,referee,pitch,kick,dribble,net,jersey,captain,whistle,tackle,shin guard'),
+ TH('golf','Golf','Sports & outdoors','GOLFCOURSE','Fore!','birdie,eagle,bogey,putter,driver,fairway,green,caddie,bunker,tee,iron,wedge,hole,clubs,swing,par,rough,flag,cart,hole in one'),
+ TH('tennis','Tennis','Sports & outdoors','TENNISCOURT','Game, set, match','serve,volley,racket,love,deuce,ace,net,baseline,lob,rally,smash,umpire,forehand,backhand,tiebreak,doubles,singles,spin,court'),
+ TH('olympics','Olympics','Sports & outdoors','OLYMPICS','Go for the gold','gold,silver,bronze,medal,torch,podium,athlete,relay,sprint,marathon,gymnast,diving,skating,skiing,anthem,flag,rings,judge,record,opening'),
+ TH('hockey','Hockey','Sports & outdoors','HOCKEYRINK','Drop the puck','puck,stick,goalie,skates,zamboni,penalty,slapshot,check,ice,net,helmet,faceoff,powerplay,hat trick,blueline,gloves,arena,pads,shootout'),
+ TH('swimming','Swimming','Sports & outdoors','SWIMMING','Dive right in','pool,lane,goggles,freestyle,butterfly,backstroke,dive,splash,flipper,cap,towel,kickboard,lifeguard,relay,wave,float,diving board'),
+ TH('bowling','Bowling','Sports & outdoors','BOWLING','Rolling along','strike,spare,pins,gutter,lane,split,frame,alley,shoes,turkey,score,hook,ball,league,approach,headpin'),
+ TH('fishing','Fishing','Sports & outdoors','FISHING','Gone to the lake','rod,reel,bait,tackle,hook,bobber,lure,worm,cast,boat,trout,bass,net,catch,dock,line,minnow,waders,tackle box'),
+ TH('camping','Camping','Sports & outdoors','CAMPFIRE','Under the stars','tent,lantern,backpack,compass,trail,hike,smores,marshmallow,canoe,cabin,flashlight,forest,campsite,pinecone,map,kayak,sleeping bag,cooler'),
+ TH('crafts','Crafts & Knitting','Home & hobbies','CRAFTING','Made by hand','yarn,needle,stitch,quilt,scissors,glue,beads,fabric,thread,button,pattern,crochet,sewing,ribbon,felt,glitter,paint,easel,canvas'),
+ TH('music','Music','Home & hobbies','SYMPHONY','Strike up the band','piano,violin,guitar,drums,flute,trumpet,cello,harp,melody,rhythm,chorus,tempo,opera,ballad,chord,concert,notes,lyrics,banjo'),
+ TH('movies','Movie Night','Home & hobbies','MOVIENIGHT','Lights, camera','popcorn,ticket,screen,director,actor,sequel,credits,trailer,comedy,drama,cinema,premiere,script,snacks,soda,reel,scene,oscar'),
+ TH('farm','Farm Life','Nature & animals','FARMHOUSE','Down on the farm','tractor,barn,silo,cow,pig,chicken,rooster,goat,sheep,hay,plow,field,fence,eggs,milk,horse,duck,farmer,corn,orchard'),
+ TH('undersea','Under the Sea','Nature & animals','UNDERWATER','Deep blue','coral,dolphin,whale,shark,octopus,squid,jellyfish,starfish,seahorse,turtle,kelp,reef,clam,crab,eel,seal,pearl,oyster,lobster'),
+ TH('space','Outer Space','Nature & animals','ASTRONAUT','Blast off','planet,star,comet,rocket,orbit,galaxy,moon,saturn,mars,cosmos,nebula,meteor,shuttle,telescope,gravity,eclipse,crater,alien,jupiter'),
+ TH('zoo','At the Zoo','Nature & animals','WILDLIFE','Call of the wild','lion,tiger,elephant,giraffe,zebra,monkey,hippo,rhino,panda,koala,kangaroo,cheetah,gorilla,penguin,camel,otter,flamingo,lemur,bear'),
+ TH('dogs','Dogs','Nature & animals','PUPPYLOVE',"Who's a good boy",'beagle,poodle,collie,boxer,terrier,husky,corgi,pug,leash,bone,fetch,bark,collar,kennel,treat,walk,paw,tail,wag'),
+ TH('cats','Cats','Nature & animals','PURRFECT','Nine lives','whiskers,purr,meow,kitten,catnip,litter,tabby,calico,siamese,paws,claws,yarn,nap,tail,mouse,perch,bowl,scratch'),
+ TH('breakfast','Breakfast','Food & drink','BREAKFAST','Rise and shine','pancakes,waffles,bacon,eggs,toast,cereal,bagel,muffin,omelet,syrup,juice,coffee,oatmeal,sausage,yogurt,grits,biscuit,fruit,hash browns'),
+ TH('italian','Italian Kitchen','Food & drink','ITALIANFOOD','Mangia','pasta,pizza,lasagna,ravioli,risotto,gelato,pesto,basil,olive,garlic,tomato,parmesan,spaghetti,meatball,cannoli,oregano,penne,ziti,bread'),
+ TH('sweets','Sweet Treats','Food & drink','DESSERTS','Save room','cake,cookie,brownie,cupcake,fudge,toffee,candy,pudding,sundae,sorbet,tart,pie,donut,caramel,truffle,custard,sprinkles,frosting,meringue'),
+ TH('coffee','Coffee Shop','Food & drink','COFFEESHOP','Wake-up call','latte,mocha,espresso,barista,mug,beans,cream,sugar,scone,muffin,cappuccino,decaf,roast,foam,caramel,vanilla,cup,steam,cookie'),
+ TH('roadtrip','Road Trip','Places & stories','ROADTRIP','Are we there yet','map,highway,motel,snacks,gas,diner,exit,bridge,tunnel,detour,scenic,landmark,suitcase,camera,souvenir,radio,mileage,car,rest stop'),
+ TH('travel','Around the World','Places & stories','PASSPORT','Bon voyage','paris,london,rome,tokyo,cairo,sydney,madrid,athens,prague,vienna,dublin,lisbon,oslo,delhi,berlin,toronto,seoul,lima'),
+ TH('colors','Colors','Places & stories','RAINBOW','Every hue','red,orange,yellow,green,blue,purple,pink,teal,maroon,navy,coral,ivory,beige,lilac,crimson,scarlet,azure,indigo'),
+ TH('fairytales','Fairy Tales','Places & stories','FAIRYTALE','Happily ever after','castle,dragon,princess,knight,witch,giant,fairy,wand,queen,king,frog,tower,slipper,beanstalk,goblin,troll,crown,spell,wish'),
+]);
+const THEME_BY_KEY=Object.fromEntries(THEMES.map(t=>[t.key,t]));
 
 const QUOTES=[
  {q:'Well done is better than well said.',a:'Benjamin Franklin'},
@@ -558,9 +691,9 @@ const Sudoku={
 const DIR8=[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
 const WordSearch={
   name:'Word Search',blurb:'Find the hidden words in every direction.',
-  gen(rng,diff){
+  gen(rng,diff,opts){
     const cfg={easy:{size:10,count:8,dirs:DIR8.slice(0,2)},medium:{size:12,count:11,dirs:DIR8.slice(0,4)},hard:{size:13,count:14,dirs:DIR8.slice(0,6)},expert:{size:15,count:18,dirs:DIR8}}[diff];
-    const theme=pick(rng,THEMES),N=cfg.size;
+    const theme=(opts&&opts.theme)||pick(rng,THEMES),N=cfg.size;
     const pool=shuffle(rng,theme.words).filter(w=>w.replace(/ /g,'').length<=N).slice(0,cfg.count+4);
     const grid=new Array(N*N).fill(''),placed=[];
     for(const w of pool.sort((a,b)=>b.length-a.length)){
@@ -739,9 +872,9 @@ const Cryptogram={
 /* ================= Word Scramble ================= */
 const Scramble={
   name:'Word Scramble',blurb:'Unscramble themed words, one row at a time.',
-  gen(rng,diff){
+  gen(rng,diff,opts){
     const[lo,hi,count]={easy:[4,5,5],medium:[5,6,6],hard:[6,7,6],expert:[8,11,6]}[diff];
-    const scored=shuffle(rng,THEMES).map(t=>({t,ws:t.words.filter(w=>!w.includes(' ')&&w.length>=lo&&w.length<=hi)}));
+    const scored=(opts&&opts.theme?[opts.theme]:shuffle(rng,THEMES)).map(t=>({t,ws:t.words.filter(w=>!w.includes(' ')&&w.length>=lo&&w.length<=hi)}));
     let best=scored.find(s=>s.ws.length>=count);
     if(!best){const t=scored[0].t;best={t,ws:t.words.filter(w=>!w.includes(' ')).sort((a,b)=>Math.abs(a.length-(lo+hi)/2)-Math.abs(b.length-(lo+hi)/2))};}
     const words=shuffle(rng,best.ws).slice(0,count).map(w=>{let s;do{s=shuffle(rng,w.split('')).join('');}while(s===w);return{w,s};});
@@ -1031,10 +1164,10 @@ function lbBuild(rng,words,N,dirs,tries){
 }
 const Letterboxes={
   name:'Letterboxes',blurb:'Circled letters start the words. Fill in the rest.',
-  gen(rng,diff){
+  gen(rng,diff,opts){
     const cfg={easy:{N:7,dirs:2,pre:2,tries:80},medium:{N:9,dirs:4,pre:1,tries:60},hard:{N:10,dirs:6,pre:1,tries:50},expert:{N:11,dirs:8,pre:1,tries:40}}[diff];
     const N=cfg.N,dirs=DIR8.slice(0,cfg.dirs);
-    const themes=shuffle(rng,THEMES).map(t=>({t,ws:[...new Set(t.words.map(w=>w.replace(/ /g,'')).filter(w=>w.length>=3&&w.length<=N))]})).sort((a,b)=>b.ws.length-a.ws.length);
+    const themes=(opts&&opts.theme?[opts.theme]:shuffle(rng,THEMES)).map(t=>({t,ws:[...new Set(t.words.map(w=>w.replace(/ /g,'')).filter(w=>w.length>=3&&w.length<=N))]})).sort((a,b)=>b.ws.length-a.ws.length);
     const th=themes[rint(rng,Math.min(3,themes.length))];
     const b=lbBuild(rng,th.ws,N,dirs,cfg.tries);
     const sol=b.g.slice();
@@ -1200,10 +1333,436 @@ const PlacesPlease={
   }
 };
 
+/* ================= Word Guess ================= */
+const QWERTY=['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+// h = right letter right spot, n = in the word elsewhere, m = not in the word; repeated letters are only credited as often as they occur
+function scoreGuess(g,t){const L=t.length,res=new Array(L).fill('m'),left={};
+  for(let i=0;i<L;i++){if(g[i]===t[i])res[i]='h';else left[t[i]]=(left[t[i]]||0)+1;}
+  for(let i=0;i<L;i++){if(res[i]!=='h'&&left[g[i]]){res[i]='n';left[g[i]]--;}}return res;}
+const WordGuess={
+  name:'Word Guess',blurb:'Guess the hidden word. The colors show how close you are.',
+  gen(rng,diff,opts){
+    const cfg={easy:{L:5,tries:7},medium:{L:5,tries:6},hard:{L:5,tries:6,strict:true},expert:{L:6,tries:6,strict:true}}[diff];
+    const th=opts&&opts.theme;
+    const themed=th?th.words.filter(w=>/^[A-Z]+$/.test(w)&&w.length===cfg.L):[];
+    return{target:pick(rng,themed.length?themed:BYLEN[cfg.L]),L:cfg.L,tries:cfg.tries,strict:!!cfg.strict,theme:themed.length?th.name:''};
+  },
+  mount(root,data,ctx){
+    const{target,L,tries,strict}=data;let rows=[],cur='',revealed=[],over=false;
+    root.innerHTML=`<p class="muted" style="margin-bottom:14px;max-width:62ch">Guess the ${L}-letter word in ${tries} tries. After each guess, <b class="wg-k h">green</b> means the right letter in the right spot, <b class="wg-k n">gold</b> means the letter is in the word somewhere else, and gray means it isn't in the word.${strict?' Hard mode: letters you have found must be used in every later guess.':''}${data.theme?` The word comes from the ${esc(data.theme)} theme.`:''}</p>
+      <div class="wg" style="--L:${L}" aria-label="Guesses"></div><p class="wg-hints"></p><div class="wg-kb" aria-label="Keyboard"></div>`;
+    const board=root.querySelector('.wg'),kb=root.querySelector('.wg-kb'),hintEl=root.querySelector('.wg-hints');
+    const rank={m:1,n:2,h:3};
+    function render(){
+      let html='';
+      for(let r=0;r<tries;r++){html+='<div class="wg-row">';
+        for(let i=0;i<L;i++){
+          if(r<rows.length){const g=rows[r],s=scoreGuess(g,target)[i];html+=`<span class="wg-t ${s}">${g[i]}</span>`;}
+          else if(r===rows.length&&!over){const ch=cur[i]||'';html+=`<span class="wg-t${ch?' filled':''}">${ch}</span>`;}
+          else html+='<span class="wg-t"></span>';}
+        html+='</div>';}
+      board.innerHTML=html;
+      const best={};rows.forEach(g=>scoreGuess(g,target).forEach((s,i)=>{const ch=g[i];if(!best[ch]||rank[s]>rank[best[ch]])best[ch]=s;}));
+      kb.innerHTML=QWERTY.map((row,ri)=>`<div class="wg-kr">${ri===2?'<button class="wg-key wide" data-k="ENTER">Enter</button>':''}${row.split('').map(ch=>`<button class="wg-key ${best[ch]||''}" data-k="${ch}">${ch}</button>`).join('')}${ri===2?'<button class="wg-key wide" data-k="BACK" aria-label="Delete letter">⌫</button>':''}</div>`).join('');
+      hintEl.textContent=revealed.length?'Hints: '+revealed.slice().sort((a,b)=>a-b).map(i=>`letter ${i+1} is ${target[i]}`).join(', ')+'.':'';
+    }
+    function strictProblem(g){
+      for(const prev of rows){const s=scoreGuess(prev,target);
+        for(let i=0;i<L;i++){if(s[i]==='h'&&g[i]!==prev[i])return`Letter ${i+1} must be ${prev[i]}.`;}
+        for(let i=0;i<L;i++){if(s[i]==='n'&&!g.includes(prev[i]))return`Your guess must include ${prev[i]}.`;}}
+      return '';
+    }
+    function press(k){
+      if(over)return;
+      if(k==='BACK'){cur=cur.slice(0,-1);render();return;}
+      if(k==='ENTER'){
+        if(cur.length<L){ctx.toast('Not enough letters.');return;}
+        if(strict){const p=strictProblem(cur);if(p){ctx.toast(p);return;}}
+        rows.push(cur);cur='';const won=rows[rows.length-1]===target;
+        if(won||rows.length>=tries)over=true;
+        render();ctx.changed();
+        if(won)ctx.solved();else if(over)ctx.failed(`The word was ${target}.`);
+        return;}
+      if(/^[A-Z]$/.test(k)&&cur.length<L){cur+=k;render();}
+    }
+    kb.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)press(b.dataset.k);});
+    function onKey(e){
+      if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+      if(!document.getElementById('modal').hidden||e.ctrlKey||e.metaKey||e.altKey)return;
+      if(e.key==='Enter'){press('ENTER');e.preventDefault();}
+      else if(e.key==='Backspace'){press('BACK');e.preventDefault();}
+      else if(/^[a-zA-Z]$/.test(e.key))press(e.key.toUpperCase());
+    }
+    document.addEventListener('keydown',onKey);
+    render();
+    return{
+      snapshot:()=>({rows,revealed}),
+      restore(s){rows=s.rows.slice();revealed=(s.revealed||[]).slice();render();},
+      hint(){if(over)return false;const known=new Set(revealed);rows.forEach(g=>scoreGuess(g,target).forEach((s,i)=>{if(s==='h')known.add(i);}));
+        const i=[...Array(L).keys()].find(j=>!known.has(j));if(i===undefined)return false;revealed.push(i);render();ctx.changed();return true;},
+      check(){return over?'This game is over.':`${tries-rows.length} ${tries-rows.length===1?'try':'tries'} left.`;},
+      destroy(){document.removeEventListener('keydown',onKey);}
+    };
+  }
+};
+
+/* ================= Four by Four ================= */
+// tier|group name|words|themes it suits. Tier 1 is the most straightforward, tier 4 the trickiest.
+const CATS=`1|Fruits|APPLE,BANANA,CHERRY,GRAPE,MANGO,PEACH,PEAR,PLUM,KIWI
+1|Vegetables|CARROT,CELERY,ONION,POTATO,SPINACH,TURNIP,RADISH,LETTUCE|garden farm
+1|Dog breeds|BEAGLE,POODLE,COLLIE,TERRIER,HUSKY,CORGI,PUG,DALMATIAN|dogs
+1|Planets|MERCURY,VENUS,EARTH,MARS,JUPITER,SATURN,URANUS,NEPTUNE|space
+1|Birds|ROBIN,SPARROW,FINCH,WREN,CROW,HERON,PELICAN,CARDINAL|birds
+1|Kitchen tools|WHISK,LADLE,SPATULA,TONGS,GRATER,PEELER,COLANDER|baking
+1|Musical instruments|PIANO,VIOLIN,FLUTE,TRUMPET,CELLO,HARP,GUITAR,TUBA|music
+1|Trees|OAK,MAPLE,BIRCH,PINE,ELM,CEDAR,WILLOW,ASPEN|fall camping
+1|Flowers|ROSE,TULIP,DAISY,LILY,ORCHID,PEONY,POPPY,DAHLIA|garden spring mothersday
+1|Footwear|BOOT,SANDAL,SNEAKER,LOAFER,CLOG,SLIPPER,MOCCASIN
+1|Pasta shapes|PENNE,RIGATONI,FUSILLI,ORZO,LINGUINE,ZITI,RAVIOLI,FARFALLE|italian
+1|Board games|CHESS,CHECKERS,SCRABBLE,SORRY,RISK,MONOPOLY,PARCHEESI|cozy
+1|Sea creatures|WHALE,DOLPHIN,SHARK,OCTOPUS,SQUID,STARFISH,JELLYFISH,SEAHORSE|undersea sea
+1|Breakfast foods|PANCAKE,WAFFLE,BACON,OMELET,TOAST,CEREAL,BAGEL,OATMEAL|breakfast
+1|Farm animals|COW,PIG,GOAT,SHEEP,CHICKEN,HORSE,DONKEY,TURKEY|farm
+1|Weather|RAIN,SNOW,HAIL,SLEET,FOG,WIND,THUNDER,DRIZZLE|weather winter
+1|Desserts|CAKE,PIE,BROWNIE,COOKIE,PUDDING,SUNDAE,CUPCAKE,TART|sweets baking
+1|Zoo animals|LION,TIGER,ZEBRA,GIRAFFE,HIPPO,RHINO,PANDA,GORILLA|zoo
+1|Coffee drinks|LATTE,MOCHA,ESPRESSO,CAPPUCCINO,AMERICANO,MACCHIATO|coffee
+1|School supplies|PENCIL,ERASER,RULER,CRAYON,BINDER,NOTEBOOK,GLUE,MARKER|backtoschool
+1|Cheeses|CHEDDAR,BRIE,GOUDA,FETA,SWISS,PARMESAN,MOZZARELLA,COLBY|italian
+1|Bodies of water|LAKE,RIVER,OCEAN,POND,CREEK,STREAM,BAY,LAGOON|fishing sea
+2|Softball gear|GLOVE,BAT,HELMET,CLEATS,VISOR,MITT|softball baseball
+2|Softball plays|BUNT,STEAL,SLIDE,PICKOFF,DOUBLE,TRIPLE,SACRIFICE,WALK|softball baseball
+2|Basketball terms|DUNK,REBOUND,DRIBBLE,LAYUP,ASSIST,FOUL,HOOP,JUMPER|basketball
+2|Football terms|TOUCHDOWN,PUNT,FUMBLE,HUDDLE,BLITZ,SNAP,SACK,KICKOFF|football thanksgiving
+2|Golf terms|BIRDIE,EAGLE,BOGEY,PAR,TEE,PUTT,FAIRWAY,CADDIE|golf
+2|Tennis terms|LOVE,DEUCE,ACE,VOLLEY,SERVE,LOB,RALLY,LET|tennis
+2|Soccer terms|GOAL,CORNER,HEADER,STRIKER,OFFSIDE,PENALTY,KEEPER,PITCH|soccer
+2|Hockey terms|PUCK,SLAPSHOT,GOALIE,FACEOFF,ZAMBONI,ICING,BOARDS|hockey
+2|Things with keys|LOCK,KEYBOARD,MAP,PIANO,CAR,DIARY,DOOR
+2|Things with shells|EGG,TURTLE,SNAIL,CLAM,TACO,PEANUT,OYSTER,COCONUT|sea
+2|Things with rings|SATURN,TREE,PHONE,CIRCUS,OLYMPICS,BOXER,WEDDING
+2|Shades of blue|NAVY,TEAL,COBALT,AZURE,SKY,ROYAL,SAPPHIRE,INDIGO|colors
+2|Shades of red|CRIMSON,SCARLET,RUBY,CHERRY,MAROON,BRICK,BURGUNDY|colors valentines
+2|Halloween sights|GHOST,WITCH,PUMPKIN,BAT,MUMMY,SKELETON,ZOMBIE,VAMPIRE|halloween
+2|Christmas things|SLEIGH,WREATH,TINSEL,STOCKING,CAROL,ELF,REINDEER,ORNAMENT|christmas winter
+2|Thanksgiving dinner|TURKEY,STUFFING,GRAVY,PIE,CRANBERRY,YAMS,ROLLS,CORNBREAD|thanksgiving fall
+2|Valentine's Day|CUPID,HEART,ROSES,CHOCOLATE,ARROW,CARD,KISS,CANDY|valentines
+2|Dances|WALTZ,TANGO,SALSA,FOXTROT,RUMBA,SWING,POLKA,JIVE|music
+2|Units of time|SECOND,MINUTE,HOUR,DAY,WEEK,MONTH,DECADE,CENTURY|newyear
+2|Poker words|BLUFF,RAISE,FOLD,CALL,CHECK,FLUSH,ANTE,POT
+2|Camping gear|TENT,LANTERN,COMPASS,CANTEEN,HATCHET,COOLER,FLASHLIGHT|camping summer
+2|Fishing gear|ROD,REEL,BAIT,LURE,BOBBER,HOOK,NET,TACKLE|fishing
+2|Bowling words|STRIKE,SPARE,GUTTER,PIN,SPLIT,LANE,FRAME|bowling
+2|Olympic events|SPRINT,MARATHON,DIVING,ARCHERY,FENCING,ROWING,JAVELIN,HURDLES|olympics swimming
+2|Space things|COMET,ROCKET,GALAXY,NEBULA,METEOR,ORBIT,ASTEROID|space
+2|Fourth of July|FLAG,FIREWORKS,PARADE,SPARKLER,EAGLE,ANTHEM,PICNIC|july4
+2|Irish symbols|SHAMROCK,HARP,CLOVER,LEPRECHAUN,RAINBOW,CELTIC|stpatricks
+2|Easter basket|EGGS,JELLYBEAN,BUNNY,CHICK,GRASS,PEEPS|easter spring
+3|___ball|BASKET,FOOT,SNOW,BASE,SOFT,VOLLEY,DODGE,HAND|softball baseball basketball football
+3|Fire___|FLY,PLACE,WORK,CRACKER,MAN,TRUCK,WOOD,ALARM|july4
+3|___cake|CUP,PAN,CHEESE,SHORT,CRAB,SPONGE,FRUIT,COFFEE|baking sweets
+3|Sun___|FLOWER,RISE,SET,SHINE,BURN,GLASSES,DIAL,ROOF|summer
+3|Things you can break|RECORD,NEWS,HEART,SILENCE,BREAD,ICE,PROMISE,BANK
+3|Fictional detectives|HOLMES,POIROT,MARPLE,COLUMBO,MAGNUM,KOJAK,DREW|whodunit books
+3|Greek letters|ALPHA,BETA,GAMMA,DELTA,SIGMA,OMEGA,THETA,LAMBDA
+3|Chess pieces|KING,QUEEN,ROOK,BISHOP,KNIGHT,PAWN|fairytales
+3|Words before "light"|DAY,MOON,FLASH,SPOT,STAR,TRAFFIC,CANDLE,FIRE|hanukkah
+3|Words after "rain"|BOW,COAT,DROP,FALL,FOREST,STORM,CHECK,WATER|weather spring
+3|Slang for a home run|DINGER,TATER,BOMB,JACK,MOONSHOT,BLAST,HOMER|softball baseball
+3|Softball positions|PITCHER,CATCHER,SHORTSTOP,FIRST,SECOND,THIRD,CENTER|softball baseball
+3|___ dog|HOT,CORN,SUN,WATCH,UNDER,TOP,SHEEP,LAP|dogs
+3|Constellations|ORION,LYRA,DRACO,PEGASUS,CYGNUS,PHOENIX,HYDRA|space
+3|Famous ships|TITANIC,MAYFLOWER,BOUNTY,BEAGLE,ENTERPRISE,PEQUOD|sea thanksgiving
+3|Capital cities|PARIS,ROME,LONDON,TOKYO,CAIRO,MADRID,ATHENS,OTTAWA|travel
+3|Shakespeare plays|HAMLET,MACBETH,OTHELLO,TEMPEST,CYMBELINE,CORIOLANUS|books
+3|___ pie|MAG,CUTIE,POT,HUMBLE,PUMPKIN,MUD,PECAN,KEY|thanksgiving sweets
+3|___jack|APPLE,FLAP,LUMBER,HIGH,CRACKER,BLACK,UNION,STEEPLE
+4|Hidden animals|CATALOG,BEARD,DOGMA,PIGMENT,RAMBLE,ANTLER,COWARD,BATON
+4|Sound like letters|SEA,BEE,TEA,EWE,EYE,WHY,JAY,PEA
+4|Palindromes|LEVEL,RADAR,CIVIC,KAYAK,ROTOR,REFER,MADAM,STATS
+4|Start with a body part|HANDLE,LEGEND,EARNEST,ARMADA,SHINDIG,HIPSTER,KNEEL,LIPSTICK
+4|End with a number|OFTEN,CANINE,ANYONE,FREIGHT,SOFTEN,WEIGHT,BONE,GLISTEN
+4|Start with a fish|CARPET,BASSOON,SOLEMN,CODEX,PERCHED,RAYON|fishing
+4|Anagrams of LISTEN|SILENT,ENLIST,TINSEL,INLETS|christmas
+4|Hidden colors|HUNDRED,STANCE,STEALTHY,PROSE,GRAYLING|colors`.split('\n').map(l=>{const[t,n,w,th]=l.split('|');return{t:+t,n,w:w.split(','),th:(th||'').split(' ').filter(Boolean)};});
+const Groups={
+  name:'Four by Four',blurb:'Sort sixteen words into four hidden groups of four.',
+  gen(rng,diff,opts){
+    const cfg={easy:{p:[1,1,2,2],m:6},medium:{p:[1,2,2,3],m:5},hard:{p:[1,2,3,4],m:4},expert:{p:[2,3,4,4],m:4}}[diff];
+    const th=opts&&opts.theme;
+    for(let tries=0;tries<600;tries++){
+      const slots=cfg.p.slice(),order=[];
+      const themed=th?CATS.filter(c=>c.th.includes(th.key)):[];
+      if(themed.length&&rng()<.85){const c=pick(rng,themed);let bi=0;slots.forEach((t,i)=>{if(Math.abs(t-c.t)<Math.abs(slots[bi]-c.t))bi=i;});slots.splice(bi,1);order.push(c);}
+      for(const t of slots){const cands=CATS.filter(c=>c.t===t&&!order.includes(c));if(!cands.length)break;order.push(pick(rng,cands));}
+      if(order.length<4)continue;
+      // every word on the board must belong to exactly one of the four groups
+      const groups=[];let ok=true;
+      for(const c of order){const others=order.filter(o=>o!==c);const avail=c.w.filter(w=>!others.some(o=>o.w.includes(w)));
+        if(avail.length<4){ok=false;break;}groups.push({name:c.n,tier:c.t,words:shuffle(rng,avail).slice(0,4)});}
+      if(!ok)continue;
+      groups.sort((a,b)=>a.tier-b.tier);
+      return{groups,mistakes:cfg.m,order:shuffle(rng,groups.flatMap(g=>g.words))};
+    }
+  },
+  mount(root,data,ctx){
+    const G=data.groups;let solved=[],left=data.mistakes,tried=new Set(),order=data.order.slice(),sel=new Set(),over=false;
+    root.innerHTML=`<p class="muted" style="margin-bottom:14px;max-width:62ch">Find four groups of four words that share something. Pick four words and submit. You can make ${data.mistakes} mistakes. Groups range from straightforward (yellow) to tricky (purple).</p>
+      <div class="ff"><div class="ff-done"></div><div class="ff-grid"></div>
+      <div class="ff-left"></div>
+      <div class="ff-ctrl"><button class="btn ghost small" data-ff="shuffle">Shuffle</button><button class="btn ghost small" data-ff="clear">Deselect all</button><button class="btn small" data-ff="submit">Submit</button></div></div>`;
+    const done=root.querySelector('.ff-done'),grid=root.querySelector('.ff-grid'),leftEl=root.querySelector('.ff-left');
+    const groupOf=w=>G.findIndex(g=>g.words.includes(w));
+    function render(){
+      done.innerHTML=solved.map(i=>`<div class="ff-bar t${G[i].tier}"><b>${esc(G[i].name)}</b><span>${G[i].words.join(', ')}</span></div>`).join('');
+      grid.innerHTML=order.map(w=>`<button class="ff-tile${sel.has(w)?' sel':''}${w.length>8?' long':''}" data-w="${w}" aria-pressed="${sel.has(w)}">${w}</button>`).join('');
+      leftEl.innerHTML=`Mistakes left: ${'<i class="on"></i>'.repeat(left)}${'<i></i>'.repeat(data.mistakes-left)}`;
+      root.querySelector('[data-ff="submit"]').disabled=sel.size!==4||over;
+    }
+    function solve(i){solved.push(i);order=order.filter(w=>groupOf(w)!==i);sel.clear();}
+    root.addEventListener('click',e=>{if(over)return;
+      const t=e.target.closest('.ff-tile');
+      if(t){const w=t.dataset.w;if(sel.has(w))sel.delete(w);else if(sel.size<4)sel.add(w);render();return;}
+      const b=e.target.closest('[data-ff]');if(!b)return;
+      if(b.dataset.ff==='shuffle'){order=shuffle(Math.random,order);render();}
+      else if(b.dataset.ff==='clear'){sel.clear();render();}
+      else if(b.dataset.ff==='submit'&&sel.size===4){
+        const key=[...sel].sort().join('|');if(tried.has(key)){ctx.toast('You already tried those four.');return;}tried.add(key);
+        const gs=[...sel].map(groupOf),g=gs[0];
+        if(gs.every(x=>x===g)){solve(g);render();ctx.changed();if(solved.length===4){over=true;ctx.solved();}return;}
+        const most=Math.max(...[0,1,2,3].map(i=>gs.filter(x=>x===i).length));
+        left--;
+        if(left<=0){over=true;sel.clear();for(let i=0;i<4;i++)if(!solved.includes(i))solved.push(i);order=[];render();ctx.changed();ctx.failed('Out of mistakes. All four groups are shown above.');return;}
+        ctx.toast(most===3?'One away…':'Not a group.');render();ctx.changed();}
+    });
+    render();
+    return{
+      snapshot:()=>({solved,left,tried:[...tried],order}),
+      restore(s){solved=s.solved.slice();left=s.left;tried=new Set(s.tried||[]);order=s.order.slice();sel.clear();render();},
+      hint(){if(over)return false;const i=[0,1,2,3].find(j=>!solved.includes(j));if(i===undefined)return false;solve(i);render();ctx.changed();if(solved.length===4){over=true;ctx.solved();}return true;},
+      check(){return over?'This game is over.':`${4-solved.length} group${4-solved.length===1?'':'s'} to go, ${left} mistake${left===1?'':'s'} left.`;},
+      destroy(){}
+    };
+  }
+};
+
+/* ================= Word Threads ================= */
+// A random path through every square (8-way moves, no crossing diagonals), later cut into the puzzle's words
+function hamPath(rng,R,C){
+  const N=R*C,NB=[...Array(N).keys()].map(i=>{const r=i/C|0,c=i%C,o=[];for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if((dr||dc)&&inB(r+dr,c+dc,R,C))o.push((r+dr)*C+c+dc);}return o;});
+  const ek=(a,b)=>a<b?a+'-'+b:b+'-'+a;
+  for(let attempt=0;attempt<60;attempt++){
+    const vis=new Uint8Array(N),path=[],edges=new Set();let budget=4000;
+    const crosses=(a,b)=>{const ar=a/C|0,ac=a%C,br=b/C|0,bc=b%C;return ar!==br&&ac!==bc&&edges.has(ek(ar*C+bc,br*C+ac));};
+    const free=j=>NB[j].filter(x=>!vis[x]).length;
+    const rec=i=>{if(--budget<0)return false;vis[i]=1;path.push(i);if(path.length===N)return true;
+      const nx=shuffle(rng,NB[i].filter(j=>!vis[j]&&!crosses(i,j))).sort((a,b)=>free(a)-free(b));
+      for(const j of nx){edges.add(ek(i,j));if(rec(j))return true;edges.delete(ek(i,j));}
+      vis[i]=0;path.pop();return false;};
+    if(rec(rint(rng,N)))return path;
+  }
+  return null;
+}
+function subsetSum(rng,items,target){const dp=new Array(target+1).fill(null);dp[0]=[];
+  for(const w of shuffle(rng,items))for(let s=target;s>=w.length;s--)if(!dp[s]&&dp[s-w.length])dp[s]=dp[s-w.length].concat([w]);
+  return dp[target];}
+const Threads={
+  name:'Word Threads',blurb:'Trace themed words through a letter grid, plus one that spans it.',
+  gen(rng,diff,opts){
+    const R=8,C=6,N=R*C;
+    const cands=(opts&&opts.theme?[opts.theme]:[]).concat(shuffle(rng,THEMES));
+    for(const th of cands){
+      const span=th.span;if(!span||span.length>16)continue;
+      const pool=[...new Set(th.words.filter(w=>/^[A-Z]+$/.test(w)&&w.length>=4&&w.length<=8&&!span.includes(w)&&!w.includes(span)))];
+      for(let a=0;a<12;a++){
+        const words=subsetSum(rng,pool,N-span.length);if(!words)break;
+        const path=hamPath(rng,R,C);if(!path)continue;
+        for(let o=0;o<400;o++){
+          const segs=[];let k=0;for(const w of shuffle(rng,words.concat([span]))){segs.push({w,cells:path.slice(k,k+w.length)});k+=w.length;}
+          const sp=segs.find(s=>s.w===span),cols=new Set(sp.cells.map(i=>i%C)),rows=new Set(sp.cells.map(i=>i/C|0));
+          if(!((cols.has(0)&&cols.has(C-1))||(rows.has(0)&&rows.has(R-1))))continue;
+          segs.forEach(s=>{if(rng()<.5)s.cells=s.cells.slice().reverse();});
+          const grid=new Array(N);segs.forEach(s=>s.cells.forEach((c,i)=>grid[c]=s.w[i]));
+          return{R,C,grid,words:segs.map(s=>({w:s.w,cells:s.cells,span:s.w===span})),clue:th.clue,themeName:th.name,dots:diff==='easy'?'all':diff==='medium'?'span':'none'};
+        }
+      }
+    }
+  },
+  mount(root,data,ctx){
+    const{R,C,grid,words}=data;let found=new Set(),hl=new Set(),sel=[],drag=null;
+    root.innerHTML=`<p class="eyebrow">Clue</p><h3 class="wt-clue">${esc(data.clue)}</h3>
+      <p class="muted" style="margin:6px 0 14px;max-width:62ch">Find the ${words.length} hidden words that fit the clue. Words bend in any direction, letters touching side to side or corner to corner. One word, the spanner, stretches across the board from one side to the other. Every letter is used exactly once.</p>
+      <div class="wt"><div class="wt-cur" aria-live="polite"></div>
+      <div class="wt-board"><svg class="wt-svg" viewBox="0 0 ${C} ${R}" aria-hidden="true"></svg><div class="wt-grid"></div></div>
+      <div class="wt-ctrl"><button class="btn ghost small" data-wt="clear">Clear</button><button class="btn small" data-wt="go">Submit word</button></div>
+      <p class="tip wt-count"></p><p class="tip">Tap letters in order, or drag across them. Tap the last letter again to submit.</p></div>`;
+    const g=root.querySelector('.wt-grid'),svg=root.querySelector('.wt-svg'),curEl=root.querySelector('.wt-cur'),countEl=root.querySelector('.wt-count');
+    const owner=new Array(R*C).fill(-1);words.forEach((w,i)=>w.cells.forEach(c=>owner[c]=i));
+    const starts=new Set(data.dots==='all'?words.map(w=>w.cells[0]):data.dots==='span'?words.filter(w=>w.span).map(w=>w.cells[0]):[]);
+    const cells=[];for(let i=0;i<R*C;i++){const b=document.createElement('button');b.className='wt-c';b.dataset.i=i;b.textContent=grid[i];b.setAttribute('aria-label',`${grid[i]}, row ${(i/C|0)+1}, column ${i%C+1}`);g.appendChild(b);cells.push(b);}
+    const adj=(a,b)=>Math.abs((a/C|0)-(b/C|0))<=1&&Math.abs(a%C-b%C)<=1&&a!==b;
+    const ctr=i=>[(i%C)+.5,(i/C|0)+.5];
+    const line=(cs,cls)=>cs.length>1?`<polyline class="${cls}" points="${cs.map(i=>ctr(i).join(',')).join(' ')}"/>`:'';
+    function render(){
+      cells.forEach((b,i)=>{const o=owner[i];let cls='wt-c';
+        if(found.has(o))cls+=words[o].span?' span':' found';else if(sel.includes(i))cls+=' sel';else if(hl.has(o))cls+=' hint';
+        if(starts.has(i)&&!found.has(o))cls+=' dot';b.className=cls;b.disabled=found.has(o);});
+      svg.innerHTML=[...found].map(i=>line(words[i].cells,words[i].span?'s':'f')).join('')+line(sel,'c');
+      curEl.textContent=sel.map(i=>grid[i]).join('')||' ';
+      countEl.textContent=`${found.size} of ${words.length} theme words found.`;
+    }
+    const won=()=>found.size===words.length;
+    function submit(){
+      if(!sel.length)return;
+      const s=sel.map(i=>grid[i]).join('');
+      if(sel.length<4){ctx.toast('Words have at least 4 letters.');}
+      else{const idx=words.findIndex((w,i)=>!found.has(i)&&w.cells.length===sel.length&&w.cells.every((c,k)=>c===sel[k]));
+        if(idx>=0){found.add(idx);hl.delete(idx);if(words[idx].span)ctx.toast('You found the spanner!');ctx.changed();}
+        else if(words.some((w,i)=>!found.has(i)&&w.w===s))ctx.toast('That word is in the puzzle, but along a different path.');
+        else if(ALLWORDS_SET.has(s))ctx.toast(`${s} is a word, but not one of the theme words.`);
+        else ctx.toast('Not in the word list.');}
+      sel=[];render();if(won())ctx.solved();
+    }
+    const cellAt=(x,y)=>{const el=document.elementFromPoint(x,y);const c=el&&el.closest&&el.closest('.wt-c');return c&&g.contains(c)?+c.dataset.i:-1;};
+    g.addEventListener('pointerdown',e=>{const i=cellAt(e.clientX,e.clientY);if(i<0||found.has(owner[i]))return;e.preventDefault();
+      const last=sel[sel.length-1];
+      if(i===last){drag={moved:false,tapLast:true};}
+      else if(sel.length&&sel[sel.length-2]===i){sel.pop();drag={moved:false};}
+      else if(sel.length&&adj(last,i)&&!sel.includes(i)){sel.push(i);drag={moved:false};}
+      else{sel=[i];drag={moved:false};}
+      try{g.setPointerCapture(e.pointerId);}catch(_){}render();});
+    g.addEventListener('pointermove',e=>{if(!drag)return;const i=cellAt(e.clientX,e.clientY);if(i<0||found.has(owner[i]))return;const last=sel[sel.length-1];
+      if(i===last)return;
+      if(sel[sel.length-2]===i){sel.pop();drag.moved=true;render();}
+      else if(adj(last,i)&&!sel.includes(i)){sel.push(i);drag.moved=true;render();}});
+    g.addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;if(d.moved||d.tapLast)submit();});
+    g.addEventListener('pointercancel',()=>{drag=null;});
+    root.querySelector('.wt-ctrl').addEventListener('click',e=>{const b=e.target.closest('[data-wt]');if(!b)return;if(b.dataset.wt==='clear'){sel=[];render();}else submit();});
+    render();
+    return{
+      snapshot:()=>({found:[...found],hl:[...hl]}),
+      restore(s){found=new Set(s.found||[]);hl=new Set(s.hl||[]);render();},
+      hint(){const shown=[...hl].find(i=>!found.has(i));
+        if(shown!==undefined){found.add(shown);hl.delete(shown);}
+        else{const order=words.map((w,i)=>i).filter(i=>!found.has(i)).sort((a,b)=>(words[a].span?1:0)-(words[b].span?1:0));if(!order.length)return false;hl.add(order[0]);ctx.toast('The letters of one word are outlined. Ask again to fill it in.');}
+        sel=[];render();ctx.changed();if(won())ctx.solved();return true;},
+      check(){return`${found.size} of ${words.length} theme words found.`;},
+      destroy(){}
+    };
+  }
+};
+
+/* ================= Letter Hive ================= */
+const ALLWORDS_SET=(()=>{const s=new Set();
+  for(const k in BYLEN)if(+k>=4)BYLEN[k].forEach(w=>s.add(w));
+  THEMES.forEach(t=>{if(t.key==='travel')return;t.words.forEach(w=>{if(/^[A-Z]{4,}$/.test(w))s.add(w);});});
+  return s;})();
+const wmask=w=>{let m=0;for(let i=0;i<w.length;i++)m|=1<<(w.charCodeAt(i)-65);return m;};
+const bits=m=>{let n=0;while(m){m&=m-1;n++;}return n;};
+const HIVE_RANKS=[[0,'Beginner'],[.05,'Good Start'],[.1,'Moving Up'],[.2,'Good'],[.3,'Solid'],[.45,'Nice'],[.6,'Great'],[.8,'Amazing'],[1,'Queen Bee']];
+const Hive={
+  name:'Letter Hive',blurb:'Make words from seven letters. Always use the center one.',
+  gen(rng,diff){
+    const cfg={easy:{min:8,goal:.3},medium:{min:10,goal:.5},hard:{min:12,goal:.7},expert:{min:12,goal:1}}[diff];
+    const all=[...ALLWORDS_SET].map(w=>[w,wmask(w)]);
+    const pangrams=shuffle(rng,all.filter(([w,m])=>bits(m)===7&&w.length>=7));
+    let best=null;
+    for(const[p,m]of pangrams.slice(0,150)){
+      for(const c of shuffle(rng,[...new Set(p)])){if(c==='S')continue;const cb=1<<(c.charCodeAt(0)-65);
+        const ans=all.filter(([w,wm])=>(wm&~m)===0&&(wm&cb)).map(x=>x[0]);
+        if(!best||ans.length>best.ans.length)best={letters:[...new Set(p)],center:c,ans};
+        if(ans.length>=cfg.min&&ans.length<=60){best={letters:[...new Set(p)],center:c,ans};break;}}
+      if(best&&best.ans.length>=cfg.min&&best.ans.length<=60)break;}
+    return{center:best.center,outer:shuffle(rng,best.letters.filter(l=>l!==best.center)),answers:best.ans.sort(),goal:cfg.goal};
+  },
+  mount(root,data,ctx){
+    const{center,answers}=data;let outer=data.outer.slice(),found=[],word='';
+    const letters=new Set([center,...outer]);
+    const pts=w=>(w.length===4?1:w.length)+(bits(wmask(w))===7?7:0);
+    const total=answers.reduce((s,w)=>s+pts(w),0),goalPts=Math.max(1,Math.round(total*data.goal));
+    const goalRank=HIVE_RANKS.filter(r=>r[0]<=data.goal).pop()[1];
+    root.innerHTML=`<p class="muted" style="margin-bottom:14px;max-width:62ch">Make words of four or more letters. Every word must use the center letter, and letters can be used more than once. Four-letter words score 1 point, longer words score 1 per letter, and a word that uses all seven letters earns 7 bonus points. Reach <b>${goalRank}</b> (${goalPts} points) to finish.</p>
+      <div class="hv"><div class="hv-score"><div class="hv-rank"><b></b><span class="tip"></span></div><div class="hv-bar"><i></i><span style="left:${data.goal*100}%"></span></div></div>
+      <div class="hv-word" aria-live="polite"></div><div class="hv-comb"></div>
+      <div class="hv-ctrl"><button class="btn ghost small" data-hv="del">Delete</button><button class="btn ghost small" data-hv="shuf">Shuffle</button><button class="btn small" data-hv="enter">Enter</button></div>
+      <div class="hv-found"><p class="eyebrow"></p><ul></ul></div></div>`;
+    const comb=root.querySelector('.hv-comb'),wordEl=root.querySelector('.hv-word');
+    const POS=[[80,14],[146,52],[146,128],[80,166],[14,128],[14,52]];
+    function render(){
+      comb.innerHTML=`<button class="hv-cell mid" data-l="${center}" style="left:80px;top:90px">${center}</button>`+outer.map((l,i)=>`<button class="hv-cell" data-l="${l}" style="left:${POS[i][0]}px;top:${POS[i][1]}px">${l}</button>`).join('');
+      wordEl.innerHTML=word?word.split('').map(ch=>`<span class="${ch===center?'c':letters.has(ch)?'':'x'}">${ch}</span>`).join(''):'<span class="ph">Type or tap letters</span>';
+      const score=found.reduce((s,w)=>s+pts(w),0),frac=score/total;
+      root.querySelector('.hv-rank b').textContent=HIVE_RANKS.filter(r=>r[0]<=frac+1e-9).pop()[1];
+      root.querySelector('.hv-rank .tip').textContent=`${score} of ${goalPts} points to finish`;
+      root.querySelector('.hv-bar i').style.width=Math.min(100,frac*100)+'%';
+      root.querySelector('.hv-found .eyebrow').textContent=`You have found ${found.length} word${found.length===1?'':'s'}`;
+      root.querySelector('.hv-found ul').innerHTML=found.slice().sort().map(w=>`<li class="${bits(wmask(w))===7?'pg':''}">${w.charAt(0)+w.slice(1).toLowerCase()}</li>`).join('');
+    }
+    const score=()=>found.reduce((s,w)=>s+pts(w),0);
+    function enter(){
+      const w=word;word='';
+      if(w.length<4)ctx.toast('Too short. Words need at least 4 letters.');
+      else if(!w.includes(center))ctx.toast(`Missing the center letter, ${center}.`);
+      else if([...w].some(ch=>!letters.has(ch)))ctx.toast('Use only the letters in the hive.');
+      else if(found.includes(w))ctx.toast('Already found.');
+      else if(!answers.includes(w))ctx.toast('Not in the word list.');
+      else{found.push(w);const p=pts(w);ctx.toast(bits(wmask(w))===7?`Pangram! +${p}`:`+${p}`);ctx.changed();}
+      render();if(score()>=goalPts)ctx.solved();
+    }
+    root.querySelector('.hv').addEventListener('click',e=>{const c=e.target.closest('.hv-cell');if(c){if(word.length<20)word+=c.dataset.l;render();return;}
+      const b=e.target.closest('[data-hv]');if(!b)return;
+      if(b.dataset.hv==='del')word=word.slice(0,-1);else if(b.dataset.hv==='shuf')outer=shuffle(Math.random,outer);else{enter();return;}render();});
+    function onKey(e){
+      if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+      if(!document.getElementById('modal').hidden||e.ctrlKey||e.metaKey||e.altKey)return;
+      if(e.key==='Enter'){enter();e.preventDefault();}
+      else if(e.key==='Backspace'){word=word.slice(0,-1);render();e.preventDefault();}
+      else if(/^[a-zA-Z]$/.test(e.key)&&word.length<20){word+=e.key.toUpperCase();render();}
+    }
+    document.addEventListener('keydown',onKey);
+    render();
+    return{
+      snapshot:()=>({found}),restore(s){found=s.found.slice();render();},
+      hint(){const left=answers.filter(w=>!found.includes(w));if(!left.length)return false;const w=pick(Math.random,left);found.push(w);ctx.toast(`Added ${w}.`);render();ctx.changed();if(score()>=goalPts)ctx.solved();return true;},
+      check(){return`You have found ${found.length} of ${answers.length} words.`;},
+      destroy(){document.removeEventListener('keydown',onKey);}
+    };
+  }
+};
+
+/* ================= Calendar themes ================= */
+const mdOf=d=>(d.getMonth()+1)*100+d.getDate();
+const inWin=(v,a,b)=>a<=b?v>=a&&v<=b:v>=a||v<=b;
+const dayDiff=(a,b)=>Math.round((new Date(b.getFullYear(),b.getMonth(),b.getDate())-new Date(a.getFullYear(),a.getMonth(),a.getDate()))/864e5);
+function nthWeekday(y,m,wd,n){const d=new Date(y,m,1);let c=0;for(;;){if(d.getDay()===wd&&++c===n)return d;d.setDate(d.getDate()+1);}}
+function easterDate(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+  return new Date(y,Math.floor((h+l-7*m+114)/31)-1,((h+l-7*m+114)%31)+1);}
+const HOLIDAYS=[
+  ['newyear',d=>inWin(mdOf(d),1230,105)],
+  ['valentines',d=>inWin(mdOf(d),201,214)],
+  ['stpatricks',d=>inWin(mdOf(d),310,317)],
+  ['easter',d=>{const k=dayDiff(d,easterDate(d.getFullYear()));return k>=0&&k<=10;}],
+  ['mothersday',d=>{const k=dayDiff(d,nthWeekday(d.getFullYear(),4,0,2));return k>=0&&k<=6;}],
+  ['july4',d=>inWin(mdOf(d),628,704)],
+  ['backtoschool',d=>inWin(mdOf(d),810,905)],
+  ['halloween',d=>inWin(mdOf(d),1015,1031)],
+  ['thanksgiving',d=>{const k=dayDiff(d,nthWeekday(d.getFullYear(),10,4,4));return k>=0&&k<=10;}],
+  ['christmas',d=>inWin(mdOf(d),1201,1226)],
+];
+// Outside the holidays, each day draws from the season plus whatever sports are in season
+const IN_SEASON=[['winter',1227,319],['spring',320,620],['summer',621,921],['fall',922,1130],['softball',301,615],['baseball',401,1031],['football',901,205],['basketball',1101,415],['hockey',1001,415],['golf',401,930],['tennis',601,910],['soccer',901,1115],['swimming',601,831],['camping',601,915],['garden',401,731],['birds',301,531],['cozy',1101,228],['sea',601,831]];
+function calendarTheme(date){
+  const d=typeof date==='string'?new Date(date+'T12:00:00'):date;
+  const h=HOLIDAYS.find(x=>x[1](d));if(h)return THEME_BY_KEY[h[0]];
+  const keys=IN_SEASON.filter(x=>inWin(mdOf(d),x[1],x[2])).map(x=>x[0]);
+  return THEME_BY_KEY[pick(makeRng('theme-'+ymd(d)),keys)];
+}
+
 /* ================= App ================= */
-const TYPES={sudoku:Sudoku,wordsearch:WordSearch,cryptogram:Cryptogram,logic:Logic,wordchain:WordChain,scramble:Scramble,fillin:FillIn,letterboxes:Letterboxes,places:PlacesPlease};
+const TYPES={sudoku:Sudoku,wordsearch:WordSearch,cryptogram:Cryptogram,logic:Logic,wordchain:WordChain,scramble:Scramble,fillin:FillIn,letterboxes:Letterboxes,places:PlacesPlease,wordguess:WordGuess,groups:Groups,threads:Threads,hive:Hive};
 const CORE_ORDER=['sudoku','wordsearch','cryptogram','logic','wordchain','scramble'];
-const TYPE_ORDER=CORE_ORDER.concat(['fillin','letterboxes','places']);
+const TYPE_ORDER=['wordguess','groups','threads','hive'].concat(CORE_ORDER,['fillin','letterboxes','places']);
+const THEMED=new Set(['wordsearch','scramble','letterboxes','wordguess','groups','threads']); /* games whose words follow the chosen theme */
 const PLAY_ORDER=TYPE_ORDER.filter(t=>t!=='wordchain'&&t!=='scramble'); /* daily, journey and quick play; the two word games stay in Free play */
 const DIFFS=['easy','medium','hard','expert'];
 const DLABEL={easy:'Easy',medium:'Medium',hard:'Hard',expert:'Expert'};
@@ -1217,6 +1776,10 @@ const ICON={
   fillin:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="12" height="4" rx="1"/><rect x="9" y="10" width="12" height="4" rx="1"/><rect x="3" y="16" width="12" height="4" rx="1"/></svg>',
   letterboxes:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="3"/><path d="M11 11l7 7M18 13v5h-5"/></svg>',
   places:'<svg viewBox="0 0 24 24"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M8.5 8.5l11 11M9 6.5h11M6.5 9v11"/></svg>',
+  wordguess:'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="5.5" height="7" rx="1"/><rect x="9.25" y="8" width="5.5" height="7" rx="1"/><rect x="16.5" y="8" width="5.5" height="7" rx="1"/><path d="M3 19h3.5M10.25 19h3.5M17.5 19h3.5"/></svg>',
+  groups:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>',
+  threads:'<svg viewBox="0 0 24 24"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6.5 6.5l4 4M13.5 10.5l4-3M12 14v4"/></svg>',
+  hive:'<svg viewBox="0 0 24 24"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/><path d="M12 8.5l3 1.75v3.5L12 15.5l-3-1.75v-3.5z"/></svg>',
   scramble:'<svg viewBox="0 0 24 24"><rect x="2.5" y="8" width="8.5" height="11" rx="1.5"/><rect x="13" y="8" width="8.5" height="11" rx="1.5"/><path d="M6.5 5c3-2.5 8-2.5 11 0M17.5 5V2.5M17.5 5H15"/></svg>',
 };
 const ic=t=>`<span class="ic">${ICON[t]}</span>`;
@@ -1231,8 +1794,16 @@ const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${Str
 const today=()=>ymd(new Date());
 
 function dailySpec(date){const d=new Date(date+'T12:00:00');const dayNum=Math.floor(d.getTime()/86400000);
-  const ord=PLAY_ORDER;
-  return{type:ord[((dayNum%ord.length)+ord.length)%ord.length],diff:['hard','easy','easy','medium','medium','hard','expert'][d.getDay()],seed:'daily-'+date,key:'daily:'+date,kind:'daily',date};}
+  const ord=PLAY_ORDER,type=ord[((dayNum%ord.length)+ord.length)%ord.length];
+  return{type,diff:['hard','easy','easy','medium','medium','hard','expert'][d.getDay()],seed:'daily-'+date,key:'daily:'+date,kind:'daily',date,theme:THEMED.has(type)?calendarTheme(date).key:null};}
+function freeTheme(type){
+  if(!THEMED.has(type))return null;const v=P.settings.theme||'auto';
+  if(v==='auto')return calendarTheme(today()).key;
+  if(v==='random')return THEMES[Math.floor(Math.random()*THEMES.length)].key;
+  return THEME_BY_KEY[v]?v:calendarTheme(today()).key;}
+function themeSelect(){
+  const cur=P.settings.theme||'auto',tt=calendarTheme(today()),groups=[...new Set(THEMES.map(t=>t.group))];
+  return`<select id="themepick" class="theme-sel"aria-label="Theme"><option value="auto"${cur==='auto'?' selected':''}>Today's theme (${esc(tt.name)})</option><option value="random"${cur==='random'?' selected':''}>Surprise me</option>${groups.map(g=>`<optgroup label="${esc(g)}">${THEMES.filter(t=>t.group===g).map(t=>`<option value="${t.key}"${cur===t.key?' selected':''}>${esc(t.name)}</option>`).join('')}</optgroup>`).join('')}</select>`;}
 function levelSpec(n){const ch=Math.ceil(n/8),pos=(n-1)%8;
   const pool=PLAY_ORDER;
   const order=shuffle(makeRng('chapter-'+ch),pool.concat(shuffle(makeRng('chx-'+ch),pool).slice(0,2)));
@@ -1305,7 +1876,7 @@ function viewToday(){
   return`<div class="stack">
     <section class="daily">
       <div><p class="eyebrow">Puzzle of the day · ${esc(nice)}</p><h2>${T.name}</h2>
-        <div class="meta"><span class="pill d-${spec.diff}">${DLABEL[spec.diff]}</span><span class="muted">${T.blurb}</span></div>
+        <div class="meta"><span class="pill d-${spec.diff}">${DLABEL[spec.diff]}</span>${spec.theme?`<span class="pill theme-pill">Theme · ${esc(THEME_BY_KEY[spec.theme].name)}</span>`:''}<span class="muted">${T.blurb}</span></div>
         <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">${done?`<span style="font-weight:700;color:var(--good)">✓ Solved in ${fmtTime(done.t)}</span><button class="btn ghost small" data-act="daily" data-date="${date}">Play again</button>`:`<button class="btn" data-act="daily" data-date="${date}">${cur&&cur.key===spec.key?'Keep going':'Start today\'s puzzle'}</button>`}</div></div>
       <span class="big-ic">${ICON[spec.type]}</span>
     </section>
@@ -1341,6 +1912,8 @@ function viewFree(){
     ${cur&&cur.spec&&cur.spec.kind==='free'?`<section class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><p class="eyebrow">Unfinished</p><b>${TYPES[cur.spec.type].name}</b> <span class="pill d-${cur.spec.diff}">${DLABEL[cur.spec.diff]}</span> <span class="muted">· ${fmtTime(cur.elapsed||0)} so far</span></div><button class="btn small" data-act="resume">Resume</button></section>`:''}
     <section><p class="eyebrow" style="margin-bottom:10px">Pick a kind of puzzle</p><div class="quick">${TYPE_ORDER.map(t=>`<button class="qcard" data-act="free-type" data-t="${t}" aria-pressed="${state.freeType===t}">${ic(t)}<b>${TYPES[t].name}</b><small>${TYPES[t].blurb}</small></button>`).join('')}</div></section>
     <section><p class="eyebrow" style="margin-bottom:10px">Difficulty</p><div class="seg" role="group" aria-label="Difficulty">${DIFFS.map(d=>`<button data-act="free-diff" data-d="${d}" aria-pressed="${state.freeDiff===d}">${DLABEL[d]}</button>`).join('')}</div></section>
+    <section><label class="eyebrow" for="themepick" style="display:block;margin-bottom:10px">Theme</label>${themeSelect()}
+      <p class="tip" style="margin-top:8px">${THEMED.has(state.freeType)?`${esc(TYPES[state.freeType].name)} uses this theme for its words.`:`${esc(TYPES[state.freeType].name)} doesn't use themes.`} Themes apply to ${[...THEMED].map(t=>TYPES[t].name).join(', ')}. "Today's theme" follows the calendar: holidays, seasons and sports seasons.</p></section>
     <div><button class="btn" data-act="free-start">New ${TYPES[state.freeType].name.toLowerCase()} puzzle</button><p class="tip" style="margin-top:8px">Every puzzle is freshly made, so there is always another one.</p></div>
   </div>`;
 }
@@ -1372,23 +1945,25 @@ function viewProgress(){
 
 function viewPlay(){
   const s=state.play,T=TYPES[s.type];
-  const where=s.kind==='daily'?`Puzzle of the day · ${new Date(s.date+'T12:00:00').toLocaleDateString(undefined,{month:'long',day:'numeric'})}`:s.kind==='level'?`Level ${s.level} · ${chapterName(Math.ceil(s.level/8))}`:'Free play';
+  const where=(s.kind==='daily'?`Puzzle of the day · ${new Date(s.date+'T12:00:00').toLocaleDateString(undefined,{month:'long',day:'numeric'})}`:s.kind==='level'?`Level ${s.level} · ${chapterName(Math.ceil(s.level/8))}`:'Free play')+(s.theme&&THEME_BY_KEY[s.theme]?` · ${THEME_BY_KEY[s.theme].name}`:'');
   return`<div class="play-head"><button class="back" data-act="back" aria-label="Back">← Back</button><div style="min-width:0"><p class="eyebrow">${esc(where)}</p><h2>${T.name} <span class="pill d-${s.diff}">${DLABEL[s.diff]}</span></h2></div><span class="timer" id="timer">${fmtTime(s.elapsed)}</span></div>
     <div class="tools"><button class="btn ghost small" data-act="hint">Hint · ${HINT_COST} pts</button><button class="btn ghost small" data-act="check">Check my work</button><button class="btn ghost small" data-act="restart" id="restartbtn">Start over</button><span class="spacer"></span><span class="hints" id="hintcount">${s.hints?`${s.hints} hint${s.hints>1?'s':''} used`:''}</span></div>
     <div id="proot"><p class="loading">Setting up your puzzle…</p></div>`;
 }
 
 /* ---------- Playing a puzzle ---------- */
-function saveCurrent(){const s=state.play;if(!s||s.done||!state.inst)return;lsSet(LSC,{key:s.key,spec:{type:s.type,diff:s.diff,seed:s.seed,key:s.key,kind:s.kind,date:s.date,level:s.level},snap:state.inst.snapshot(),hints:s.hints,elapsed:s.elapsed});}
+const specOf=s=>({type:s.type,diff:s.diff,seed:s.seed,key:s.key,kind:s.kind,date:s.date,level:s.level,theme:s.theme||null});
+function saveCurrent(){const s=state.play;if(!s||s.done||!state.inst)return;lsSet(LSC,{key:s.key,spec:specOf(s),snap:state.inst.snapshot(),hints:s.hints,elapsed:s.elapsed});}
 let saveT=null;const saveSoon=()=>{clearTimeout(saveT);saveT=setTimeout(saveCurrent,300);};
 function stopPlay(){if(state.inst){saveCurrent();state.inst.destroy();state.inst=null;}clearInterval(state.timer);state.timer=null;}
 function startPuzzle(spec,fresh){
   stopPlay();
   state.play=Object.assign({},spec,{hints:0,elapsed:0,done:false});state.view='play';render();window.scrollTo(0,0);
   setTimeout(()=>{
-    const T=TYPES[spec.type],data=T.gen(makeRng(spec.type+'|'+spec.diff+'|'+spec.seed),spec.diff);
+    const T=TYPES[spec.type],th=spec.theme&&THEME_BY_KEY[spec.theme]||null;
+    const data=T.gen(makeRng(spec.type+'|'+spec.diff+'|'+spec.seed+(th?'|'+th.key:'')),spec.diff,{theme:th});
     const root=document.getElementById('proot');if(!root||state.play.key!==spec.key)return;
-    const ctx={changed:saveSoon,solved:onSolved,toast,settings:P.settings,setSetting(k,v){P.settings[k]=v;saveProgress();}};
+    const ctx={changed:saveSoon,solved:onSolved,failed:onFailed,toast,settings:P.settings,setSetting(k,v){P.settings[k]=v;saveProgress();}};
     state.inst=T.mount(root,data,ctx);
     const cur=lsGet(LSC);
     if(!fresh&&cur&&cur.key===spec.key&&cur.snap){try{state.inst.restore(cur.snap);state.play.hints=cur.hints||0;state.play.elapsed=cur.elapsed||0;updateHud();}catch(e){}}
@@ -1396,6 +1971,16 @@ function startPuzzle(spec,fresh){
   },30);
 }
 function updateHud(){const s=state.play;const t=document.getElementById('timer');if(t)t.textContent=fmtTime(s.elapsed);const h=document.getElementById('hintcount');if(h)h.textContent=s.hints?`${s.hints} hint${s.hints>1?'s':''} used`:'';}
+function onFailed(msg){
+  const s=state.play;if(!s||s.done)return;s.done=true;clearInterval(state.timer);lsSet(LSC,null);
+  setTimeout(()=>{
+    const m=document.getElementById('modal');
+    m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lost"><p class="eyebrow">${TYPES[s.type].name} · ${DLABEL[s.diff]}</p><h2 id="lost">So close!</h2>
+      <p>${esc(msg)}</p><p class="muted">No points this time. You can try the same puzzle again${s.kind==='free'?' or start a new one':''}.</p>
+      <div class="actions"><button class="btn" data-act="retry">Try again</button>${s.kind==='free'?'<button class="btn ghost" data-act="free-start">New puzzle</button>':''}<button class="btn ghost" data-act="close">See the board</button></div></div>`;
+    m.hidden=false;m.querySelector('.btn').focus();
+  },650);
+}
 function onSolved(){
   const s=state.play;if(!s||s.done)return;s.done=true;clearInterval(state.timer);
   let pts=BASE_PTS[s.diff];if(s.hints===0)pts=Math.round(pts*1.5);
@@ -1433,6 +2018,8 @@ document.addEventListener('click',e=>{
   else if(act==='free-diff'){state.freeDiff=el.dataset.d;P.settings.lastDiff=state.freeDiff;saveProgress();render();}
   else if(act==='free-start'){closeModal();startFree();}
   else if(act==='resume'){const cur=lsGet(LSC);if(cur&&cur.spec)startPuzzle(cur.spec);}
+  else if(act==='retry'){closeModal();if(state.play)startPuzzle(specOf(state.play),true);}
+  else if(act==='close'){closeModal();}
   else if(act==='back'){stopPlay();const k=state.play&&state.play.kind;state.play=null;state.view=k==='level'?'journey':k==='free'?'free':'today';render();}
   else if(act==='hint'){if(state.inst&&!state.play.done){
     if(balance()<HINT_COST){toast(`A hint costs ${HINT_COST} points and you have ${balance()}. Solve another puzzle to earn more.`);return;}
@@ -1441,7 +2028,7 @@ document.addEventListener('click',e=>{
     saveProgress();updateHud();saveSoon();}}
   else if(act==='check'){if(state.inst)toast(state.inst.check());}
   else if(act==='restart'){
-    if(el.dataset.armed){const s=state.play;lsSet(LSC,null);startPuzzle({type:s.type,diff:s.diff,seed:s.seed,key:s.key,kind:s.kind,date:s.date,level:s.level},true);}
+    if(el.dataset.armed){lsSet(LSC,null);closeModal();startPuzzle(specOf(state.play),true);}
     else{el.dataset.armed='1';el.textContent='Tap again to clear';setTimeout(()=>{if(el.isConnected){delete el.dataset.armed;el.textContent='Start over';}},3000);}
   }
   else if(act==='reset'){
@@ -1449,7 +2036,8 @@ document.addEventListener('click',e=>{
     else{el.dataset.armed='1';el.textContent='Tap again to erase everything';setTimeout(()=>{if(el.isConnected){delete el.dataset.armed;el.textContent='Reset all progress';}},3500);}
   }
 });
-function startFree(){const seed=Date.now().toString(36)+Math.random().toString(36).slice(2,7);startPuzzle({type:state.freeType,diff:state.freeDiff,seed,key:`free:${state.freeType}:${state.freeDiff}:${seed}`,kind:'free'});}
+function startFree(){const seed=Date.now().toString(36)+Math.random().toString(36).slice(2,7);startPuzzle({type:state.freeType,diff:state.freeDiff,seed,key:`free:${state.freeType}:${state.freeDiff}:${seed}`,kind:'free',theme:freeTheme(state.freeType)});}
+document.addEventListener('change',e=>{if(e.target.id==='themepick'){P.settings.theme=e.target.value;saveProgress();render();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const m=document.getElementById('modal');if(!m.hidden)m.hidden=true;}});
 window.addEventListener('pagehide',saveCurrent);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveCurrent();});
