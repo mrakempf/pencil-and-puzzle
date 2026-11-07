@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The build workflow passes its run number so each new APK installs over the last one
+def buildNumber = (project.findProperty('versionCode') ?: '1') as int
+
+android {
+    namespace 'com.mrakempf.pencilandpuzzle'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.mrakempf.pencilandpuzzle'
+        minSdk 24
+        targetSdk 34
+        versionCode buildNumber
+        versionName "1.${buildNumber}"
+    }
+
+    // A permanent key comes from GitHub secrets when one has been added; otherwise the build signs with a temporary key
+    def keystorePath = System.getenv('ANDROID_KEYSTORE_PATH')
+    signingConfigs {
+        release {
+            if (keystorePath) {
+                storeFile file(keystorePath)
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS') ?: 'app'
+                keyPassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig keystorePath ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+
+    lint {
+        checkReleaseBuilds false
+    }
+}
