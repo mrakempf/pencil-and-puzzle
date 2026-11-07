@@ -400,8 +400,11 @@ p{margin:0}
 <div id="modal" hidden></div>
 <div id="toast" hidden></div>
 
+<script src="words.js"></script>
 <script>
 'use strict';
+/* Full dictionary for checking guesses (ENABLE, 4-8 letters); empty if words.js failed to load, in which case checks fall back to the built-in lists */
+const ENABLE_SET=new Set((window.ENABLE_WORDS||'').split(' ').filter(Boolean));
 /* ================= Random numbers (seeded, so a seed always rebuilds the same puzzle) ================= */
 function seedFn(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=(h<<13)|(h>>>19);}h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);return (h^(h>>>16))>>>0;}
 function makeRng(seed){let a=seedFn(String(seed));return function(){a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
@@ -512,6 +515,63 @@ const THEMES=OLD_THEMES.map(t=>{const m=THEME_META[t.name];return{key:m[0],name:
  TH('colors','Colors','Places & stories','RAINBOW','Every hue','red,orange,yellow,green,blue,purple,pink,teal,maroon,navy,coral,ivory,beige,lilac,crimson,scarlet,azure,indigo'),
  TH('fairytales','Fairy Tales','Places & stories','FAIRYTALE','Happily ever after','castle,dragon,princess,knight,witch,giant,fairy,wand,queen,king,frog,tower,slipper,beanstalk,goblin,troll,crown,spell,wish'),
 ]);
+/* More words per theme, so bigger grids and harder levels have plenty to draw from */
+const THEME_EXTRA={
+ fall:'apples,cobbler,gourds,hay,leaf,flannel,boots,cider,crisp,harvest moon,pecan pie,cornucopia,wheat,barn,tractor,squirrel,acorns,maize,chilly,amber,russet,crimson,golden,october,november,equinox,migration,pumpkin patch,corn maze,foliage',
+ christmas:'tree,star,santa,gifts,mittens,manger,nativity,sugarplum,fruitcake,poinsettia,yuletide,chestnuts,jingle,snowflake,lights,eve,tidings,noel,wrapping,cocoa,fireside,figgy pudding,north pole,stockings,elf,carolers,evergreen,frosty,blitzen,prancer',
+ sea:'lagoon,coral,reef,surf,sailor,schooner,dinghy,mast,rudder,current,breaker,jetty,seagull,clam,mussel,seaweed,cove,bay,sandcastle,tidepool,lifeguard,seafoam,marina,starboard,port,galley,anchorage,lifeboat,captain,whitecap',
+ garden:'shovel,rake,hoe,spade,wheelbarrow,seedling,bulb,petal,stem,root,weeds,greenhouse,pots,soil,earthworm,bumblebee,butterfly,ladybug,hydrangea,lavender,rosemary,mint,parsley,squash,pumpkin,cucumber,pepper,carrot,radish,gnome,birdbath,hedge,pruning,harvest',
+ baking:'mixer,bowl,batter,icing,crumb,loaf,bread,cake,tart,eclair,croissant,brownie,cupcake,macaron,shortbread,nutmeg,ginger,cocoa,eggs,milk,baking soda,cream,whipped,knead,proof,timer,cooling rack,sheet pan,oven mitt,measuring cup,sifter,whisking,dough hook,crust,meringue',
+ birds:'bluebird,goldfinch,woodpecker,mockingbird,thrush,starling,grackle,junco,titmouse,pigeon,crow,blackbird,swift,martin,tanager,bunting,grosbeak,vireo,kingfisher,osprey,quail,pheasant,grouse,feeder,nest,feather,birdhouse,suet,seed,songbird,flock,migrate',
+ weather:'hurricane,typhoon,heatwave,overcast,cloudy,windy,chilly,thermometer,barometer,humidity,front,pressure,flurries,whiteout,hailstorm,downpour,shower,sprinkle,gale,breezy,muggy,foggy,frostbite,radar,meteorologist,umbrella,raincoat,thunderclap,sunshine,cold snap',
+ whodunit:'clues,evidence,fingerprint,magnifying glass,dagger,poison,revolver,rope,wrench,lead pipe,study,ballroom,conservatory,cellar,maid,heir,inheritance,confession,accomplice,interrogate,suspicion,deduction,suspects,lockpick,trench coat,constable,ransom,blackmail,lineup,motive,case file,cold case',
+ books:'hardcover,librarian,shelf,catalog,index,glossary,prologue,climax,narrator,protagonist,character,setting,genre,fiction,nonfiction,biography,memoir,novella,anthology,publisher,manuscript,bestseller,bookstore,reading,footnote,appendix,plot twist,cliffhanger,bookclub,dust jacket,chapter book,page turner',
+ cozy:'candlelight,hot cocoa,tea,kettle,sweater,cardigan,socks,beanie,throw,cushion,embers,logs,crackle,popcorn,cookies,soup,stew,cinnamon,vanilla,lantern,rain,thunder,window seat,nook,afghan,comforter,flannel,robe,warmth,snuggle,bubble bath,reading lamp',
+ newyear:'ball drop,times square,hope,wish,celebrate,bubbly,cider,fizz,horns,kazoo,streamers,banner,party favors,twelve,cheer,hug,reflection,planner,journal,annual,decade,jubilee,auld lang syne,new leaf,goal setting,firecracker,ringing in,eve,tiara,top hat',
+ winter:'cold,frozen,ice,icy,frigid,arctic,polar,penguin,snowdrift,snowplow,snowshoe,ski,sledding,toboggan,cabin,chalet,hearth,marshmallow,gloves,beanie,thermal,solstice,december,january,february,evergreen,pinecone,cardinal,hibernation,woolen,wind chill,snow day',
+ valentines:'romance,darling,honey,sweetie,beloved,affection,passion,devotion,cuddle,smooch,serenade,candlelight,dinner,flowers,tulips,truffles,bonbons,lovebirds,sonnet,locket,ring,proposal,engagement,crimson,blush,ruby,doily,glitter,heartfelt,admirer,love letter,red roses',
+ stpatricks:'ireland,erin,shillelagh,blarney,limerick,potato,corned beef,soda bread,pub,toast,cheers,ballad,tin whistle,step dance,shamrocks,four leaf,horseshoe,march,patron,saint,green beer,emerald isle,kiss me,top o the morning,folklore,pipes,clan,irish stew',
+ spring:'rebirth,thaw,showers,drizzle,mud,crocus,hyacinth,iris,violet,dandelion,clover,bee,butterfly,caterpillar,tadpole,frog,duckling,calf,foal,chick,eggs,planting,seedling,sapling,bicycle,april,march,may,equinox,cherry,blossoms,pollen,spring cleaning,daylight',
+ easter:'egg hunt,dyeing,baskets,chocolate bunny,peeps,carrots,daffodils,hyacinth,lilies,church,sunday,resurrection,hallelujah,lavender,yellow,chicks,ducklings,ham,hot cross buns,jellybeans,marshmallow,treats,surprise,hidden,meadow,cottontail,easter lily,pastel eggs,bonnets,sunrise service',
+ mothersday:'mom,mother,mama,grandma,nana,daughter,son,family,kiss,thank you,cherish,nurture,gentle,kindness,roses,daisies,lilies,orchid,breakfast in bed,pancakes,drawing,poem,scarf,necklace,bracelet,garden,manicure,massage,rest,keepsake,handmade,greeting card',
+ summer:'heat,humid,sunny,sunburn,sunglasses,swimsuit,towel,beach ball,sandcastle,surf,waves,boardwalk,carnival,ferris wheel,iced tea,snow cone,corn,grill,cookout,campfire,fireflies,crickets,lake,canoe,kayak,dock,road trip,july,august,solstice,flip flops,sun hat,day camp',
+ july4:'america,nation,declaration,constitution,founders,colonies,thirteen,revolution,patriots,minutemen,liberty bell,statue,red,white,blue,boom,bang,sparkle,apple pie,lemonade,marching band,drumline,veterans,bunting,bonfire,old glory,red white and blue,firecracker,pledge,glow stick',
+ backtoschool:'classes,student,principal,schedule,syllabus,textbook,lesson,math,science,history,reading,spelling,art,music,gym,cafeteria,hallway,bell,attendance,grades,report card,test,exam,study,flashcards,calculator,pen,highlighter,folder,stapler,sharpener,globe,map,chalkboard,whiteboard',
+ halloween:'mask,cape,fangs,claws,werewolf,frankenstein,ghoul,phantom,specter,haunt,haunted house,graveyard,tombstone,crypt,coffin,bones,skull,raven,owl,crow,scarecrow,cornfield,hayride,potion,spell,wand,hex,jack o lantern,trick or treat,candy corn,caramel apple,full moon,fog,creak,scream,boo',
+ thanksgiving:'gratitude,thankful,blessing,grace,table,dinner,guests,relatives,grandparents,cousins,drumstick,wishbone,carving,roast,oven,casserole,green beans,sweet potato,mashed,biscuits,pecan pie,apple pie,whipped cream,cider,cornucopia,harvest,maize,squash,gourd,mayflower,plymouth,november,thursday,nap',
+ hanukkah:'flame,kindle,eight days,festival,celebration,maccabees,jerusalem,sufganiyot,potato,sour cream,brisket,challah,spin,coins,chocolate,prayer,star,blue,silver,window,dedication,tradition,latke,menorahs,candlelight,story,winter,holiday,feast,cousins',
+ softball:'pitch,windmill,rise ball,drop ball,changeup,curve,screwball,lineup,batting order,cleanup,leadoff,squeeze,steal,stolen base,walk,strikeout,ball,full count,error,putout,assist,double play,fly ball,grounder,line drive,pop up,infield,chalk,base path,home plate,coach,team,tournament,league,season,championship,trophy,jersey,ponytail,eye black,sunflower seeds,bat bag',
+ baseball:'ballpark,bleachers,scoreboard,outfield,infield,mound,home plate,fastball,knuckleball,changeup,sinker,cutter,walkoff,grand slam,bases loaded,batting average,lineup,manager,coach,closer,reliever,starter,rookie,veteran,world series,playoffs,hot dogs,organ,mascot,fans,cap,jersey,cleats,box score,rain delay',
+ football:'gridiron,field,stadium,yard line,first down,third down,line of scrimmage,offense,defense,special teams,running back,wide receiver,tight end,lineman,safety,cornerback,kicker,punter,interception,pass,handoff,spiral,hail mary,overtime,halftime,super bowl,playoffs,draft,mascot,cheerleaders,marching band,pom poms,end around',
+ basketball:'three pointer,slam dunk,alley oop,crossover,fast break,pick and roll,zone,point guard,shooting guard,small forward,power forward,rim,net,paint,key,half court,shot clock,dribbling,steal,block,turnover,traveling,double dribble,overtime,tipoff,march madness,bracket,final four,swish,brick,bench,hook shot,bank shot',
+ soccer:'ball,field,goalpost,crossbar,penalty kick,free kick,corner kick,throw in,yellow card,red card,linesman,midfielder,winger,fullback,sweeper,forward,stopper,keeper,save,shot,assist,hat trick,overtime,shootout,stoppage time,stadium,fans,chant,scarf,world cup,league,cup,derby,bicycle kick',
+ golf:'tee time,clubhouse,golf ball,divot,green fee,pin,flagstick,hazard,water hazard,sand trap,dogleg,approach,chip,pitch,drive,slice,hook,fade,draw,mulligan,handicap,scorecard,albatross,ace,links,course,tournament,caddy,visor,glove,spikes,putting green,driving range,back nine,front nine',
+ tennis:'grand slam,wimbledon,clay,grass,hard court,ball boy,line judge,fault,double fault,advantage,break point,set point,match point,game,set,match,drop shot,overhead,topspin,slice,racquet,strings,grip,headband,wristband,sneakers,scoreboard,trophy,mixed doubles,ball machine,center court',
+ olympics:'summer games,winter games,opening ceremony,closing ceremony,torch relay,flame,village,stadium,gymnastics,swimming,track,field,decathlon,pole vault,high jump,long jump,shot put,discus,hammer,javelin,hurdles,cycling,rowing,sailing,fencing,archery,boxing,wrestling,judo,curling,bobsled,luge,biathlon,snowboard,figure skating',
+ hockey:'rink,boards,glass,crease,blue line,red line,center ice,winger,defenseman,enforcer,captain,goaltender,save,slap shot,wrist shot,one timer,assist,power play,penalty box,overtime,stanley cup,skate,stick tape,mask,pads,jersey,locker room,breakaway,icing,offside,line change',
+ swimming:'deep end,shallow end,high dive,swimsuit,swim cap,lane rope,starting block,lap,stroke,breaststroke,sidestroke,flip turn,cannonball,belly flop,whistle,noodle,inner tube,snorkel,flippers,wetsuit,chlorine,sunscreen,locker,medley,swim meet,dog paddle,treading water,backflip,pool party',
+ bowling:'bowling ball,bowling shoes,pinsetter,gutter ball,perfect game,three hundred,seven ten,foul line,arrows,oil pattern,curve,straight,spin,tenth frame,team,tournament,trophy,shoe rental,snack bar,arcade,glow bowling,bumpers,ball return,scorer,lane oil,double,fill ball,open frame',
+ fishing:'fishing rod,sinker,float,spinner,jig,fly,fly fishing,nightcrawler,cooler,canoe,pier,lake,river,stream,pond,catfish,walleye,perch,pike,salmon,crappie,bluegill,catch and release,big one,tackle shop,life jacket,fishing hat,rod holder,landing net,sunrise,ice fishing',
+ camping:'tent stakes,rainfly,sleeping pad,pillow,headlamp,firewood,kindling,matches,hatchet,camp stove,skillet,coffee pot,hot dogs,trail mix,granola,water bottle,canteen,hiking boots,ranger,national park,wildlife,bear,deer,owl,stars,constellation,ghost story,bug spray,pocketknife,tarp,rope,bonfire',
+ crafts:'knit,purl,cast on,skein,ball of yarn,knitting needles,crochet hook,granny square,afghan,scarf,mittens,hat,sweater,quilting,patchwork,applique,embroidery,cross stitch,hoop,thimble,pincushion,seam,hem,zipper,bobbin,sewing machine,scrapbook,stickers,stamps,paper,cardstock,origami,decoupage,pottery,clay,kiln',
+ music:'song,singer,choir,orchestra,band,conductor,baton,sheet music,score,staff,treble,bass,clef,sharp,flat,octave,scale,harmony,duet,trio,quartet,solo,aria,anthem,lullaby,jazz,blues,country,gospel,folk,rock,pop,classical,saxophone,clarinet,trombone,tuba,oboe,bassoon,xylophone,accordion',
+ movies:'film,box office,blockbuster,matinee,usher,lobby,concession,candy,nachos,theater,projector,big screen,surround sound,butter,seats,aisle,front row,red carpet,movie star,celebrity,producer,screenplay,soundtrack,special effects,animation,cartoon,documentary,musical,western,thriller,horror,romance,mystery,action,adventure,remake,award',
+ farm:'pasture,meadow,haystack,hayloft,stable,coop,henhouse,pigpen,trough,feed,grain,wheat,oats,barley,soybeans,pumpkins,apples,windmill,weathervane,scarecrow,pitchfork,shovel,bucket,overalls,straw hat,boots,sunrise,lamb,calf,piglet,foal,turkey,goose,donkey,mule,llama,sheepdog,barn cat',
+ undersea:'ocean,sea,deep,abyss,trench,current,wave,tide,bubbles,shipwreck,treasure,submarine,diver,scuba,snorkel,anemone,urchin,sponge,barnacle,manta ray,stingray,swordfish,clownfish,angelfish,pufferfish,barracuda,marlin,tuna,walrus,narwhal,orca,manatee,plankton,krill,seaweed,sand dollar',
+ space:'universe,solar system,sun,mercury,venus,earth,uranus,neptune,pluto,asteroid,meteorite,black hole,supernova,constellation,big dipper,orion,milky way,spaceship,spacesuit,helmet,launch,countdown,liftoff,mission,capsule,space station,satellite,lunar,module,moonwalk,observatory,stargazing,cosmonaut,martian',
+ zoo:'zookeeper,habitat,enclosure,aviary,aquarium,reptile house,petting zoo,safari,jungle,savanna,leopard,jaguar,panther,hyena,warthog,meerkat,baboon,orangutan,chimpanzee,sloth,anteater,armadillo,crocodile,alligator,python,tortoise,iguana,peacock,ostrich,emu,toucan,parrot,seal,walrus,polar bear,grizzly,wolf,fox,moose,bison',
+ dogs:'puppy,pup,doggy,hound,mutt,retriever,labrador,golden retriever,shepherd,dachshund,chihuahua,bulldog,rottweiler,greyhound,spaniel,schnauzer,pomeranian,maltese,mastiff,doghouse,harness,frisbee,ball,chew toy,biscuit,kibble,belly rub,sit,stay,roll over,howl,sniff,dog park,groomer,vet',
+ cats:'kitty,tomcat,feline,persian,maine coon,ragdoll,bengal,sphynx,tuxedo,tortoiseshell,ginger,orange tabby,scratching post,cat tree,laser pointer,feather toy,ball of yarn,litter box,cat food,tuna,milk,cream,collar,bell,sunbeam,windowsill,curiosity,nine lives,pounce,stretch,groom,hiss,knead,hairball,catnap,lap',
+ breakfast:'french toast,crepes,scrambled,fried,poached,sunny side up,home fries,muffins,scones,croissant,danish,granola,milk,orange juice,grapefruit,berries,banana,cream cheese,jam,jelly,honey,butter,maple syrup,ham,eggs benedict,quiche,frittata,smoothie,tea,latte,diner,brunch,toaster,griddle',
+ italian:'fettuccine,alfredo,carbonara,bolognese,marinara,tortellini,gnocchi,linguine,rigatoni,fusilli,orzo,pancetta,prosciutto,salami,mozzarella,ricotta,provolone,focaccia,ciabatta,bruschetta,antipasto,caprese,minestrone,tiramisu,panna cotta,biscotti,espresso,cappuccino,limoncello,olive oil,balsamic,rosemary,sage,parsley',
+ sweets:'lollipop,gumdrop,licorice,taffy,jellybean,marshmallow,peppermint,butterscotch,nougat,praline,bonbon,chocolate bar,candy cane,rock candy,cotton candy,gelato,ice cream,popsicle,milkshake,cheesecake,cobbler,crumble,eclair,macaron,cannoli,baklava,scone,muffin,cinnamon roll,churro,funnel cake,shortcake,parfait,trifle,mousse',
+ coffee:'drip,pour over,french press,cold brew,iced coffee,americano,macchiato,flat white,cortado,affogato,frappe,chai,matcha,tea,hot chocolate,whipped cream,syrup,hazelnut,cinnamon,nutmeg,pumpkin spice,oat milk,almond milk,grinder,kettle,filter,carafe,thermos,tumbler,saucer,biscotti,croissant,danish,pastry,tip jar,menu,order,counter',
+ roadtrip:'route,road,interstate,freeway,toll,turnpike,overpass,rest area,gas station,fill up,tire,spare tire,mechanic,odometer,speedometer,cruise control,directions,atlas,billboard,mile marker,state line,welcome sign,national park,campground,roadside,attraction,postcard,playlist,sing along,car games,license plate,cooler,sunglasses,windshield,backseat,shotgun',
+ travel:'amsterdam,brussels,copenhagen,stockholm,helsinki,warsaw,budapest,zurich,geneva,venice,florence,milan,naples,barcelona,seville,edinburgh,munich,istanbul,moscow,beijing,shanghai,bangkok,singapore,manila,mumbai,nairobi,rio,buenos aires,santiago,mexico city,havana,montreal,vancouver,chicago,boston,denver,seattle,miami',
+ colors:'gold,silver,bronze,copper,white,black,gray,brown,tan,cream,peach,salmon,lavender,violet,magenta,fuchsia,turquoise,aqua,cyan,emerald,jade,olive,lime,mint,mustard,amber,burgundy,ruby,rose,blush,charcoal,slate,khaki,ochre,sepia,periwinkle,cobalt,sapphire',
+ fairytales:'once upon a time,happily ever after,glass slipper,pumpkin coach,fairy godmother,stepmother,stepsisters,ball,gown,tiara,prince,kingdom,palace,moat,drawbridge,dungeon,enchanted,curse,potion,poison apple,mirror,dwarfs,woodcutter,big bad wolf,grandmother,red riding hood,three bears,porridge,golden egg,goose,magic beans,mermaid,unicorn,genie,lamp,carpet',
+};
+THEMES.forEach(t=>{const extra=(THEME_EXTRA[t.key]||'').split(',').map(s=>s.trim().toUpperCase().replace(/[^A-Z ]/g,'')).filter(Boolean);t.words=[...new Set(t.words.concat(extra))];});
 const THEME_BY_KEY=Object.fromEntries(THEMES.map(t=>[t.key,t]));
 
 const QUOTES=[
@@ -692,9 +752,10 @@ const DIR8=[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
 const WordSearch={
   name:'Word Search',blurb:'Find the hidden words in every direction.',
   gen(rng,diff,opts){
-    const cfg={easy:{size:10,count:8,dirs:DIR8.slice(0,2)},medium:{size:12,count:11,dirs:DIR8.slice(0,4)},hard:{size:13,count:14,dirs:DIR8.slice(0,6)},expert:{size:15,count:18,dirs:DIR8}}[diff];
+    // decoy: fill the empty squares with letters from the hidden words, so stray fragments look like real words
+    const cfg={easy:{size:12,count:12,dirs:DIR8.slice(0,4)},medium:{size:14,count:16,dirs:DIR8.slice(0,6)},hard:{size:15,count:20,dirs:DIR8,decoy:true},expert:{size:17,count:26,dirs:DIR8,decoy:true}}[diff];
     const theme=(opts&&opts.theme)||pick(rng,THEMES),N=cfg.size;
-    const pool=shuffle(rng,theme.words).filter(w=>w.replace(/ /g,'').length<=N).slice(0,cfg.count+4);
+    const pool=shuffle(rng,theme.words).filter(w=>w.replace(/ /g,'').length<=N).slice(0,cfg.count+10);
     const grid=new Array(N*N).fill(''),placed=[];
     for(const w of pool.sort((a,b)=>b.length-a.length)){
       if(placed.length>=cfg.count)break;
@@ -708,7 +769,7 @@ const WordSearch={
         placed.push({word:w,W,r,c,r1,c1});break;
       }
     }
-    const fill='EEEEAAAIIIOOONNNRRRSSSTTTLLDDUUCCMMHHGPPBFYWKV';
+    const fill=cfg.decoy?placed.map(p=>p.W).join(''):'EEEEAAAIIIOOONNNRRRSSSTTTLLDDUUCCMMHHGPPBFYWKV';
     for(let i=0;i<grid.length;i++)if(!grid[i])grid[i]=fill[rint(rng,fill.length)];
     placed.sort((a,b)=>a.word.localeCompare(b.word));
     return{theme:theme.name,size:N,grid,words:placed};
@@ -791,7 +852,7 @@ const WordChain={
     const inputs=[...root.querySelectorAll('input')];
     function status(li){
       const l=L[li],e=entries[li],res=[];let prev=l.start;
-      for(let i=0;i<e.length;i++){const w=e[i];let st='';if(w.length===4){if(!DICT.has(w))st='notword';else if(!oneApart(prev,w))st='nolink';else st='ok';}res.push(st);prev=w;}
+      for(let i=0;i<e.length;i++){const w=e[i];let st='';if(w.length===4){if(!DICT.has(w)&&!ENABLE_SET.has(w))st='notword';else if(!oneApart(prev,w))st='nolink';else st='ok';}res.push(st);prev=w;}
       const complete=res.every(s=>s==='ok')&&oneApart(e[e.length-1],l.end);
       return{res,complete};
     }
@@ -807,7 +868,7 @@ const WordChain={
     }
     const allDone=()=>L.every((_,li)=>status(li).complete);
     root.addEventListener('input',e=>{const t=e.target;if(!t.matches('input'))return;const v=t.value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);entries[+t.dataset.l][+t.dataset.i]=v;render();ctx.changed();
-      if(v.length===4&&DICT.has(v)){const k=inputs.indexOf(t);const nx=inputs.slice(k+1).find(x=>!x.value);if(nx)nx.focus();}
+      if(v.length===4&&(DICT.has(v)||ENABLE_SET.has(v))){const k=inputs.indexOf(t);const nx=inputs.slice(k+1).find(x=>!x.value);if(nx)nx.focus();}
       if(allDone())ctx.solved();});
     render();
     return{
@@ -873,10 +934,10 @@ const Cryptogram={
 const Scramble={
   name:'Word Scramble',blurb:'Unscramble themed words, one row at a time.',
   gen(rng,diff,opts){
-    const[lo,hi,count]={easy:[4,5,5],medium:[5,6,6],hard:[6,7,6],expert:[8,11,6]}[diff];
+    const[lo,hi,count]={easy:[5,6,6],medium:[6,8,7],hard:[7,9,8],expert:[9,12,8]}[diff];
     const scored=(opts&&opts.theme?[opts.theme]:shuffle(rng,THEMES)).map(t=>({t,ws:t.words.filter(w=>!w.includes(' ')&&w.length>=lo&&w.length<=hi)}));
     let best=scored.find(s=>s.ws.length>=count);
-    if(!best){const t=scored[0].t;best={t,ws:t.words.filter(w=>!w.includes(' ')).sort((a,b)=>Math.abs(a.length-(lo+hi)/2)-Math.abs(b.length-(lo+hi)/2))};}
+    if(!best){const t=scored[0].t;best={t,ws:t.words.filter(w=>!w.includes(' ')).sort((a,b)=>Math.abs(a.length-(lo+hi)/2)-Math.abs(b.length-(lo+hi)/2)).slice(0,count)};}
     const words=shuffle(rng,best.ws).slice(0,count).map(w=>{let s;do{s=shuffle(rng,w.split('')).join('');}while(s===w);return{w,s};});
     return{theme:best.t.name,words,firstLetter:diff==='easy'};
   },
@@ -1071,7 +1132,7 @@ function xwBuild(rng,N,target,lo,hi){
 const FillIn={
   name:'Fill-In',blurb:'Slot every word into its place in the crossing grid.',
   gen(rng,diff){
-    const cfg={easy:{N:9,n:10,lo:3,hi:6,pre:2},medium:{N:11,n:15,lo:3,hi:7,pre:1},hard:{N:13,n:21,lo:3,hi:8,pre:0},expert:{N:15,n:28,lo:3,hi:8,pre:0}}[diff];
+    const cfg={easy:{N:11,n:15,lo:3,hi:7,pre:1},medium:{N:13,n:22,lo:4,hi:8,pre:0},hard:{N:15,n:30,lo:4,hi:8,pre:0},expert:{N:17,n:38,lo:4,hi:8,pre:0}}[diff];
     let best=null;
     for(let a=0;a<40;a++){const r=xwBuild(rng,cfg.N,cfg.n,cfg.lo,cfg.hi);if(r&&(!best||r.words.length>best.words.length))best=r;if(best&&best.words.length>=cfg.n)break;}
     const{N,A,words}=best;
@@ -1165,9 +1226,9 @@ function lbBuild(rng,words,N,dirs,tries){
 const Letterboxes={
   name:'Letterboxes',blurb:'Circled letters start the words. Fill in the rest.',
   gen(rng,diff,opts){
-    const cfg={easy:{N:7,dirs:2,pre:2,tries:80},medium:{N:9,dirs:4,pre:1,tries:60},hard:{N:10,dirs:6,pre:1,tries:50},expert:{N:11,dirs:8,pre:1,tries:40}}[diff];
+    const cfg={easy:{N:9,dirs:4,pre:1,tries:60},medium:{N:10,dirs:6,pre:0,tries:50},hard:{N:12,dirs:8,pre:0,tries:40},expert:{N:13,dirs:8,pre:0,tries:30}}[diff];
     const N=cfg.N,dirs=DIR8.slice(0,cfg.dirs);
-    const themes=(opts&&opts.theme?[opts.theme]:shuffle(rng,THEMES)).map(t=>({t,ws:[...new Set(t.words.map(w=>w.replace(/ /g,'')).filter(w=>w.length>=3&&w.length<=N))]})).sort((a,b)=>b.ws.length-a.ws.length);
+    const themes=(opts&&opts.theme?[opts.theme]:shuffle(rng,THEMES)).map(t=>({t,ws:[...new Set(t.words.filter(w=>!w.includes(' ')&&w.length>=3&&w.length<=N))]})).sort((a,b)=>b.ws.length-a.ws.length);
     const th=themes[rint(rng,Math.min(3,themes.length))];
     const b=lbBuild(rng,th.ws,N,dirs,cfg.tries);
     const sol=b.g.slice();
@@ -1273,7 +1334,7 @@ function ppBuild(rng,N,groups,per,dirs,tries){
 const PlacesPlease={
   name:'Places, Please',blurb:'Send each numbered group of words off in its own direction.',
   gen(rng,diff){
-    const cfg={easy:{N:8,groups:5,per:[3,4],dirs:4,tries:150},medium:{N:9,groups:7,per:[3,4],dirs:6,tries:150},hard:{N:11,groups:10,per:[3,4],dirs:8,tries:120},expert:{N:13,groups:14,per:[3,5],dirs:8,tries:100}}[diff];
+    const cfg={easy:{N:9,groups:7,per:[3,4],dirs:6,tries:150},medium:{N:11,groups:10,per:[3,4],dirs:8,tries:120},hard:{N:13,groups:14,per:[3,5],dirs:8,tries:100},expert:{N:15,groups:19,per:[4,5],dirs:8,tries:80}}[diff];
     const dirs=DIR8.slice(0,cfg.dirs),N=cfg.N;
     const b=ppBuild(rng,N,cfg.groups,cfg.per,DIR8.slice(0,cfg.dirs),cfg.tries);
     const grps=b.out.sort((a,c)=>a.r-c.r||a.c-c.c).map((x,i)=>({num:i+1,r:x.r,c:x.c,words:x.words.map(y=>({w:y.w,di:y.di})).sort((p,q)=>p.w.localeCompare(q.w))}));
@@ -1377,6 +1438,7 @@ const WordGuess={
       if(k==='BACK'){cur=cur.slice(0,-1);render();return;}
       if(k==='ENTER'){
         if(cur.length<L){ctx.toast('Not enough letters.');return;}
+        if(ENABLE_SET.size&&cur!==target&&!ENABLE_SET.has(cur)&&!ALLWORDS_SET.has(cur)){ctx.toast('Not in the word list.');return;}
         if(strict){const p=strictProblem(cur);if(p){ctx.toast(p);return;}}
         rows.push(cur);cur='';const won=rows[rows.length-1]===target;
         if(won||rows.length>=tries)over=true;
@@ -1619,7 +1681,7 @@ const Threads={
       else{const idx=words.findIndex((w,i)=>!found.has(i)&&w.cells.length===sel.length&&w.cells.every((c,k)=>c===sel[k]));
         if(idx>=0){found.add(idx);hl.delete(idx);if(words[idx].span)ctx.toast('You found the spanner!');ctx.changed();}
         else if(words.some((w,i)=>!found.has(i)&&w.w===s))ctx.toast('That word is in the puzzle, but along a different path.');
-        else if(ALLWORDS_SET.has(s))ctx.toast(`${s} is a word, but not one of the theme words.`);
+        else if(ALLWORDS_SET.has(s)||ENABLE_SET.has(s))ctx.toast(`${s} is a word, but not one of the theme words.`);
         else ctx.toast('Not in the word list.');}
       sel=[];render();if(won())ctx.solved();
     }
@@ -1763,7 +1825,8 @@ const TYPES={sudoku:Sudoku,wordsearch:WordSearch,cryptogram:Cryptogram,logic:Log
 const CORE_ORDER=['sudoku','wordsearch','cryptogram','logic','wordchain','scramble'];
 const TYPE_ORDER=['wordguess','groups','threads','hive'].concat(CORE_ORDER,['fillin','letterboxes','places']);
 const THEMED=new Set(['wordsearch','scramble','letterboxes','wordguess','groups','threads']); /* games whose words follow the chosen theme */
-const PLAY_ORDER=TYPE_ORDER.filter(t=>t!=='wordchain'&&t!=='scramble'); /* daily, journey and quick play; the two word games stay in Free play */
+const FREE_ONLY=new Set(['wordchain','scramble','wordguess','groups','threads','hive']);
+const PLAY_ORDER=TYPE_ORDER.filter(t=>!FREE_ONLY.has(t)); /* daily, journey and quick play; the FREE_ONLY games appear only in Free play */
 const DIFFS=['easy','medium','hard','expert'];
 const DLABEL={easy:'Easy',medium:'Medium',hard:'Hard',expert:'Expert'};
 const BASE_PTS={easy:10,medium:20,hard:35,expert:50};

@@ -8,7 +8,8 @@ An endless puzzle book in a single web page, with 13 kinds of puzzle at four dif
 Features:
 
 - **Themes**: over 50 themes, including holidays, seasons, sports (softball, baseball, football, basketball and more), food, animals and hobbies. Word Search, Word Scramble, Letterboxes, Word Guess, Four by Four and Word Threads use the chosen theme. "Today's theme" follows the calendar: holidays first, then the season and whatever sports are in season.
-- **Puzzle of the day**: a new puzzle every day, themed by the calendar, with a streak and a 7-day strip to catch up on missed days.
+- **Puzzle of the day**: a new puzzle every day, themed by the calendar, with a streak and a 7-day strip to catch up on missed days. The daily puzzle and the journey use the classic puzzles only; Word Guess, Four by Four, Word Threads, Letter Hive, Word Chains and Word Scramble live in Free play.
+- **Word list**: `words.js` holds the public-domain ENABLE word list (4–8 letter words) so word games accept any real English word.
 - **Journey**: levels in chapters of 8 around an island, getting harder as you go; up to 3 stars per level.
 - **Points for hints**: every solved puzzle earns points (Easy 5, Medium 10, Hard 15, Expert 20, half again with no hints, +5 for the daily). Each hint costs 5. You start with 25.
 - **XP and titles**: new puzzles earn XP toward solver levels, from "Pencil Sharpener" to "Puzzle Legend".
@@ -19,7 +20,8 @@ Progress saves in the browser on each device. When opened as a Claude artifact, 
 
 | File | What it does |
 |---|---|
-| `index.html` | The whole app in one file. |
+| `index.html` | The app. |
+| `words.js` | The dictionary used to check guesses. Keep it next to `index.html`. |
 | `manifest.webmanifest`, `icons/` | App name and icons used when it's added to a phone's home screen. |
 | `Open Pencil & Puzzle.cmd` | Double-click to play on this PC in its own window (Microsoft Edge app mode). Works offline. |
 | `Pencil & Puzzle (online).url` | Opens the published version on claude.ai. |
